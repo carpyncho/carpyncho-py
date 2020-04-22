@@ -1,4 +1,16 @@
 {
+  "_test": {
+    "parquet_bz2_small": {
+      "hname": "Small parquet file",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-21",
+      "md5sum": "10176f94027db8b636c9683a964cd8dc  small.parquet.bz2",
+      "filename": "small.parquet.bz2",
+      "driveid": "1U_-8JMwnOLaXyDZp2_CgBX3WxxR7qnI4",
+      "size": 3034
+    }
+  },
   "b206": {
     "features": {
       "hname": "Features",
