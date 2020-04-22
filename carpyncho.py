@@ -36,6 +36,7 @@ import bz2
 import pathlib
 import typing as t
 import inspect
+import hashlib
 
 import attr
 
@@ -176,7 +177,8 @@ class Carpyncho:
         return self.retrieve_index(reset=False)
 
     def list_tiles(self):
-        return tuple(self.index_.keys())
+        index = self.index_
+        return tuple(k for k in index.keys() if not k.startswith("_"))
 
     def list_catalogs(self, tile):
         index = self.index_
@@ -205,7 +207,7 @@ class Carpyncho:
     # THE DOWNLOAD PART
     # =========================================================================
 
-    def _grive_download(self, tile, catalog, driveid, size):
+    def _grive_download(self, tile, catalog, driveid, size, md5sum):
 
         # https://stackoverflow.com/a/39225272
         # https://stackoverflow.com/a/27508615
@@ -239,15 +241,26 @@ class Carpyncho:
         decompressor = bz2.BZ2Decompressor()
         parquet_stream = io.BytesIO()
 
+        # ademas necesitamos fijarnos que el md5 este ok
+        file_hash = hashlib.md5()
+
         # retrive all the data one chunk at the time
         for chunk in response.iter_content(CHUNK_SIZE):
             if not chunk:
                 break
             parquet_stream.write(decompressor.decompress(chunk))
+            file_hash.update(chunk)
             pbar.update(CHUNK_SIZE)
 
         # stop the progress bar
         pbar.close()
+
+        # check if the file was download correctly
+        if file_hash.hexdigest() != md5sum:
+            raise IOError(
+                f"'{tile}-{catalog}' incorrect download.\n"
+                f"expected: {md5sum}\n"
+                f"caclulated: {file_hash.hexdigest()}")
 
         # read the entire stream into a dataframe
         df = pd.read_parquet(parquet_stream)
@@ -256,6 +269,7 @@ class Carpyncho:
     def get_catalog(self, tile, catalog):
         info = self.catalog_info(tile, catalog)
         driveid, size = info["driveid"], info["size"]
+        md5sum = info["md5sum"].split()[0].strip().lower()
 
         df = from_cache(
             cache=self.cache,
@@ -263,7 +277,10 @@ class Carpyncho:
             function=self._grive_download,
             cache_expire=None,
             force=False,
-            tile=tile, catalog=catalog, driveid=driveid, size=size)
+
+            # params to _gdrive_download
+            tile=tile, catalog=catalog,
+            driveid=driveid, size=size, md5sum=md5sum)
 
         return df
 
@@ -298,19 +315,28 @@ class CLI:
             print(f"- {tile}")
 
     def list_catalogs(self, tile):
+        print(f"Tile {tile}")
         for catalog in self.client.list_catalogs(tile=tile):
-            print(f"- {tile}: {catalog}")
+            print(f"    - {catalog}")
 
     def has_catalog(self, tile, catalog):
-        has = "" if self.client.has_catalog(tile, catalog) else "NO"
-        print(f"Catalog '{catalog}' or tile '{tile}': {has} exists")
+        has = "" if self.client.has_catalog(tile, catalog) else "NO "
+        print(f"Catalog '{catalog}' or tile '{tile}': {has}exists")
 
     def catalog_info(self, tile, catalog):
         print(f"Catalog {tile}-{catalog}")
         for k, v in self.client.catalog_info(tile, catalog).items():
             if k == "size":
-                v = f"{v / 1024  / 1024:.2f} MiB"
-            print(f"   - {k}: {v}")
+                new_v = v / 1024 / 1024
+                unit = "MiB"
+                if new_v < 1:
+                    new_v = v / 1024
+                    unit = "KiB"
+                if new_v < 1:
+                    new_v = v
+                    unit = "B"
+                v = f"{new_v:.2f} {unit}"
+            print(f"    - {k}: {v}")
 
     def get_catalog(self, tile, catalog, *, out):
         PARSERS = {

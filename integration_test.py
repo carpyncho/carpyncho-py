@@ -29,7 +29,7 @@ import carpyncho
 
 
 # =============================================================================
-# EQUATORIAL TESTCASE
+# CLIENT TEST
 # =============================================================================
 
 @pytest.fixture
@@ -46,7 +46,8 @@ def test_index(client):
 
 def test_list_tiles(client):
     index = client.retrieve_index(reset=True)
-    assert set(client.list_tiles()) == set(index.keys())
+    keys = {k for k in index.keys() if not k.startswith("_")}
+    assert set(client.list_tiles()) == keys
 
 
 def test_list_catalogs(client):
@@ -82,5 +83,65 @@ def test_catalog_info(client):
 
 
 def test_get_catalog(client):
-    df = client.get_catalog("_test", "small")
+    df = client.get_catalog("_test", "parquet_bz2_small")
     assert isinstance(df, pd.DataFrame)
+
+
+# =============================================================================
+# CLI TEST
+# =============================================================================
+
+def test_CLI_list_tiles(client, script_runner):
+    expected = "\n".join(
+        f"- {t}" for t in client.list_tiles())
+    ret = script_runner.run('carpyncho', "list-tiles")
+    assert ret.stdout.strip() == expected
+    assert ret.stderr == ''
+
+
+def test_CLI_list_catalogs(client, script_runner):
+    expected = (
+        f"Tile _test\n" + "\n".join(
+            f"    - {c}" for c in client.list_catalogs("_test")))
+    ret = script_runner.run('carpyncho', "list-catalogs", "_test")
+    assert ret.stdout.strip() == expected
+    assert ret.stderr == ''
+
+
+def test_CLI_has_catalog(client, script_runner):
+    ret = script_runner.run(
+        'carpyncho', "has-catalog", "_test", "parquet_bz2_small")
+    assert ret.stdout.strip().endswith(": exists")
+    assert ret.stderr == ''
+
+    ret = script_runner.run(
+        'carpyncho', "has-catalog", "_test", "nope")
+    assert ret.stdout.strip().endswith(": NO exists")
+    assert ret.stderr == ''
+
+
+def test_CLI_catalog_info(client, script_runner):
+    expected = "\n".join([
+        "Catalog _test-parquet_bz2_small",
+        "    - hname: Small parquet file",
+        "    - format: BZIP2-Parquet",
+        "    - extension: .parquet.bz2",
+        "    - date: 2020-04-21",
+        "    - md5sum: 10176f94027db8b636c9683a964cd8dc  small.parquet.bz2",
+        "    - filename: small.parquet.bz2",
+        "    - driveid: 1U_-8JMwnOLaXyDZp2_CgBX3WxxR7qnI4",
+        "    - size: 2.96 KiB"])
+
+    ret = script_runner.run(
+        'carpyncho', "catalog-info", "_test", "parquet_bz2_small")
+
+    assert ret.stdout.strip() == expected
+    assert ret.stderr == ''
+
+
+def test_CLI_get_catalog(client, script_runner):
+    ret = script_runner.run(
+        'carpyncho', "get-catalog",
+        "_test", "parquet_bz2_small", "--out", "test.csv")
+    assert ret.stdout.strip() == 'Writing test.csv...'
+    assert "_test-parquet_bz2_small: " in ret.stderr
