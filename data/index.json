@@ -1,0 +1,376 @@
+{
+  "b206": {
+    "features": {
+      "hname": "Features",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "8d6e3ae818a7e20c93711749bbfa0eb0  features_b206.parquet.bz2",
+      "filename": "features_b206.parquet.bz2",
+      "driveid": "13aHrvy-AskEnQ9CsOXiZMBJ07tUSttAZ",
+      "size": 173480326
+    },
+    "lc": {
+      "hname": "Time-Serie",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "e1e4ff97f460e00394f2e5b9bce486a5  lc_obs_b206.parquet.bz2",
+      "filename": "lc_obs_b206.parquet.bz2",
+      "driveid": "1B5De-Bhlj0UcBg3wn-9FPxJFh3dgos3K",
+      "size": 234612301
+    }
+  },
+  "b214": {
+    "features": {
+      "hname": "Features",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "026db6f016f295f84d1748ff6736d4a5  features_b214.parquet.bz2",
+      "filename": "features_b214.parquet.bz2",
+      "driveid": "1HgeI61YXBVAj7NLJfLZ7d_H_35qKOp7I",
+      "size": 158818395
+    },
+    "lc": {
+      "hname": "Time-Serie",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "674be37ba71a6576a318fe37f9881ba2  lc_obs_b214.parquet.bz2",
+      "filename": "lc_obs_b214.parquet.bz2",
+      "driveid": "1qQcAEOboZRMlCybodGbOJDwlXA9MSeku",
+      "size": 222203369
+    }
+  },
+  "b216": {
+    "features": {
+      "hname": "Features",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "433aae05541a2f5b191aa95d717fa83c  features_b216.parquet.bz2",
+      "filename": "features_b216.parquet.bz2",
+      "driveid": "1-t165sLjn0k507SFeW-A4p9wYVL9rP4B",
+      "size": 149073679
+    },
+    "lc": {
+      "hname": "Time-Serie",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "236e126f82e80684f29247220470b831  lc_obs_b216.parquet.bz2",
+      "filename": "lc_obs_b216.parquet.bz2",
+      "driveid": "1C-_3A6almD42ewASe8n74Y355mYn9tZG",
+      "size": 369866999
+    }
+  },
+  "b220": {
+    "features": {
+      "hname": "Features",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "786504579370eec12a16ca648743437e  features_b220.parquet.bz2",
+      "filename": "features_b220.parquet.bz2",
+      "driveid": "16MxSchQnl-rQwS-7pamcgmHif-adltE6",
+      "size": 180772411
+    },
+    "lc": {
+      "hname": "Time-Serie",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "3069610779bbfe22278f7bf2d8638b93  lc_obs_b220.parquet.bz2",
+      "filename": "lc_obs_b220.parquet.bz2",
+      "driveid": "17fx0GAr0T81hygsMKisUI0dOEFV6P2G-",
+      "size": 390143613
+    }
+  },
+  "b228": {
+    "features": {
+      "hname": "Features",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "a8f9c955fd78591f6a218f2f71cf9bd5  features_b228.parquet.bz2",
+      "filename": "features_b228.parquet.bz2",
+      "driveid": "11GscTVPMkNEovNNMkUWsVDENemLhK5mL",
+      "size": 198739357
+    },
+    "lc": {
+      "hname": "Time-Serie",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "00e0de7e82803781e3d966c8de802e5c  lc_obs_b228.parquet.bz2",
+      "filename": "lc_obs_b228.parquet.bz2",
+      "driveid": "1moYmynI6WHRsnY_M5lX2ssriPuHhulLK",
+      "size": 284206848
+    }
+  },
+  "b234": {
+    "features": {
+      "hname": "Features",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "593f670337deb31f36d67a09687bfe97  features_b234.parquet.bz2",
+      "filename": "features_b234.parquet.bz2",
+      "driveid": "1hI67b6ReqD4m6BE1n5tNVmMyNEpmJ98J",
+      "size": 220551070
+    },
+    "lc": {
+      "hname": "Time-Serie",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "7ac0452d52968dd8e710bd40b6b2bafb  lc_obs_b234.parquet.bz2",
+      "filename": "lc_obs_b234.parquet.bz2",
+      "driveid": "1kjA2aOf0oAqtrQTgcJbIy5J0dAWpdv5G",
+      "size": 593803787
+    }
+  },
+  "b247": {
+    "features": {
+      "hname": "Features",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "a55dc98fedd2bcda9f09dd3590cceded  features_b247.parquet.bz2",
+      "filename": "features_b247.parquet.bz2",
+      "driveid": "1K2QfBriyAPwz6-sj20tU3NqokZk8z7sk",
+      "size": 266371435
+    },
+    "lc": {
+      "hname": "Time-Serie",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "1a1a2565d5d845a3d1e1bcff772d61cc  lc_obs_b247.parquet.bz2",
+      "filename": "lc_obs_b247.parquet.bz2",
+      "driveid": "19yqo5ZBfcqs70coEgtAGyxUbMFdEAM-3",
+      "size": 742334985
+    }
+  },
+  "b248": {
+    "features": {
+      "hname": "Features",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "b944e75a528abbbc6568ba91f3e164de  features_b248.parquet.bz2",
+      "filename": "features_b248.parquet.bz2",
+      "driveid": "1VDMOu7R8htwrmcpxr41Uo8I68Z_sZFrH",
+      "size": 275625649
+    },
+    "lc": {
+      "hname": "Time-Serie",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "de095b360e50980f5b208649a5b53c06  lc_obs_b248.parquet.bz2",
+      "filename": "lc_obs_b248.parquet.bz2",
+      "driveid": "1Of13ccy5L6uXpR9Vrp3IjM6817j14cRu",
+      "size": 761596041
+    }
+  },
+  "b261": {
+    "features": {
+      "hname": "Features",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "6c42f3abf7d194db21a63e9b09e69992  features_b261.parquet.bz2",
+      "filename": "features_b261.parquet.bz2",
+      "driveid": "1XUHguJv9icdWx6rMEr1wsrEtAvD2uHgJ",
+      "size": 299655468
+    },
+    "lc": {
+      "hname": "Time-Serie",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "f64ad71836bd4e54015b26951df464aa  lc_obs_b261.parquet.bz2",
+      "filename": "lc_obs_b261.parquet.bz2",
+      "driveid": "1cTAOsa01ZFu66YsWbtUehquic6sxwA2M",
+      "size": 724028312
+    }
+  },
+  "b262": {
+    "features": {
+      "hname": "Features",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "91c68259ee6d4aa9473b9c53a761d514  features_b262.parquet.bz2",
+      "filename": "features_b262.parquet.bz2",
+      "driveid": "1rNOhvy59MPvpHZxU2LH8H_NgM-8zAgYx",
+      "size": 316091890
+    },
+    "lc": {
+      "hname": "Time-Serie",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "22a680bb2249eff57679a439d1f9c25c  lc_obs_b262.parquet.bz2",
+      "filename": "lc_obs_b262.parquet.bz2",
+      "driveid": "1DLXlCDSjZ5hQmQOleD0gCQ6GoQkC89i0",
+      "size": 751973673
+    }
+  },
+  "b263": {
+    "features": {
+      "hname": "Features",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "5c2e72f25717d280497f0c958b15b02b  features_b263.parquet.bz2",
+      "filename": "features_b263.parquet.bz2",
+      "driveid": "1p1gbxjipa0j-WTwoCzwp3BZO19buDUjs",
+      "size": 312855192
+    },
+    "lc": {
+      "hname": "Time-Serie",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "18c425511c026988a7044c3cc313345d  lc_obs_b263.parquet.bz2",
+      "filename": "lc_obs_b263.parquet.bz2",
+      "driveid": "1u9O-slkBGRtc0TYeNOJKNQjpcz7JCjyB",
+      "size": 999900514
+    }
+  },
+  "b264": {
+    "features": {
+      "hname": "Features",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "4f5ac618dee4742600309f4f71a99eb6  features_b264.parquet.bz2",
+      "filename": "features_b264.parquet.bz2",
+      "driveid": "1oQD88_c0cmvESgziPa0F3djm2HpTvJR2",
+      "size": 324345396
+    },
+    "lc": {
+      "hname": "Time-Serie",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "6fc6630d5a11e6799d504a576ff96e11  lc_obs_b264.parquet.bz2",
+      "filename": "lc_obs_b264.parquet.bz2",
+      "driveid": "1tNuZGjaYowxaS1d5yitJsxG4aDsxzz8t",
+      "size": 1034137418
+    }
+  },
+  "b277": {
+    "features": {
+      "hname": "Features",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "e660e35f64b3055627d0ac4e09b044e2  features_b277.parquet.bz2",
+      "filename": "features_b277.parquet.bz2",
+      "driveid": "1QBXDb_eRSk6lBAz42sGOr2sjDPApznQl",
+      "size": 339169988
+    },
+    "lc": {
+      "hname": "Time-Serie",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "dac4263dcc62424c67f6efe6fa5a0dce  lc_obs_b277.parquet.bz2",
+      "filename": "lc_obs_b277.parquet.bz2",
+      "driveid": "1h0qjtD5hVimjRQxuJ_WrHzprRgSBKVG0",
+      "size": 876267456
+    }
+  },
+  "b278": {
+    "features": {
+      "hname": "Features",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "a032ae385fce700ee3c1f68db2abb342  features_b278.parquet.bz2",
+      "filename": "features_b278.parquet.bz2",
+      "driveid": "1e9Zjkt3fobhRCRDtQwD2UqqFEQ59c3rm",
+      "size": 348645569
+    },
+    "lc": {
+      "hname": "Time-Serie",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "3b8fa876bdb2c78a4efd63574039a67a  lc_obs_b278.parquet.bz2",
+      "filename": "lc_obs_b278.parquet.bz2",
+      "driveid": "12p3nc8X8uayayvOdGT7u98B5A1dQt2cq",
+      "size": 798247749
+    }
+  },
+  "b356": {
+    "features": {
+      "hname": "Features",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "a48c2a4749275aa988dbc3fa415c7ed7  features_b356.parquet.bz2",
+      "filename": "features_b356.parquet.bz2",
+      "driveid": "1gh8NFUBmKKdkIPj9ONqBzWfgMbx5o3rO",
+      "size": 325517468
+    },
+    "lc": {
+      "hname": "Time-Serie",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "a3e59ac4da40f83fd8435549561c86e8  lc_obs_b356.parquet.bz2",
+      "filename": "lc_obs_b356.parquet.bz2",
+      "driveid": "1IG-7ooQ_nUiZ-z8JBXe_tj36EkZejOf6",
+      "size": 753414496
+    }
+  },
+  "b360": {
+    "features": {
+      "hname": "Features",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "7d373c565a45432652b1b12b1f070297  features_b360.parquet.bz2",
+      "filename": "features_b360.parquet.bz2",
+      "driveid": "1PyDAGLjLYZR1GkWwdZHhmiVj8gkNCt9l",
+      "size": 416792045
+    },
+    "lc": {
+      "hname": "Time-Serie",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "477897e2f7cf30255cf2e04dae0f2a45  lc_obs_b360.parquet.bz2",
+      "filename": "lc_obs_b360.parquet.bz2",
+      "driveid": "1x3IubwgIkAbOlNIQEqWNGYP0JaWSpS4j",
+      "size": 1338340198
+    }
+  },
+  "b396": {
+    "features": {
+      "hname": "Features",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "b4f7e84b869550de6d29aa3db9053327  features_b396.parquet.bz2",
+      "filename": "features_b396.parquet.bz2",
+      "driveid": "16h4hyKMlgOVZLfDkAVgPPnVa6eDYWBh7",
+      "size": 302972103
+    },
+    "lc": {
+      "hname": "Time-Serie",
+      "format": "BZIP2-Parquet",
+      "extension": ".parquet.bz2",
+      "date": "2020-04-14",
+      "md5sum": "076d5a5bcf2018fad0dc3deb6c99e7ae  lc_obs_b396.parquet.bz2",
+      "filename": "lc_obs_b396.parquet.bz2",
+      "driveid": "1BtG6f12OEkL6mt18kbx4vJ47TLshU6ad",
+      "size": 829182007
+    }
+  }
+}
