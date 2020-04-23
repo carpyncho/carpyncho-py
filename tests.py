@@ -171,8 +171,10 @@ def test_CLI_catalog_info(client, script_runner):
 
 
 def test_CLI_download_catalog(client, script_runner):
+    outpath = os.path.join(TEST_CACHE_PATH, "test.csv")
+
     ret = script_runner.run(
         'carpyncho', "download-catalog",
-        "_test", "parquet_bz2_small", "--out", "test.csv")
-    assert ret.stdout.strip() == 'Writing test.csv...'
+        "_test", "parquet_bz2_small", "--out", outpath)
+    assert ret.stdout.strip() == f'Writing {outpath}...'
     assert "_test-parquet_bz2_small: " in ret.stderr

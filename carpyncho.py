@@ -56,6 +56,8 @@ import pandas as pd
 # CONSTANTS
 # =============================================================================
 
+VERSION = __version__
+
 #: Location of the entire dataset index.
 CARPYNCHO_INDEX_URL = "https://raw.githubusercontent.com/carpyncho/carpyncho-py/master/data/index.json"  # noqa
 
@@ -415,6 +417,12 @@ class CLI:
 
     """
 
+    footnotes = "\n".join([
+        "This software is under the BSD 3-Clause License.",
+        "Copyright (c) 2020, Juan Cabral.",
+        "For bug reporting or other instructions please check:"
+        "https://github.com/carpyncho/carpyncho-py"])
+
     #: Carpyncho client.
     client = attr.ib()
 
@@ -424,24 +432,52 @@ class CLI:
             if k.startswith("_"):
                 continue
             v = getattr(self, k)
-            if inspect.ismethod(v) and v is not self.get_commands:
+            if inspect.ismethod(v) and k != "get_commands":
                 methods[k] = v
         return methods
 
+    def version(self):
+        """Print Carpyncho version."""
+        print(VERSION)
+
     def list_tiles(self):
+        """Show available tiles."""
         for tile in self.client.list_tiles():
             print(f"- {tile}")
 
     def list_catalogs(self, tile):
+        """Show the available catalogs for a given tile.
+
+        tile:
+            The name of the tile to retrieve the catalogs.
+
+        """
         print(f"Tile {tile}")
         for catalog in self.client.list_catalogs(tile=tile):
             print(f"    - {catalog}")
 
     def has_catalog(self, tile, catalog):
+        """Check if a given catalog and tile exists.
+
+        tile:
+
+        catalog:
+            The name of the catalog.
+
+        """
         has = "" if self.client.has_catalog(tile, catalog) else "NO "
         print(f"Catalog '{catalog}' or tile '{tile}': {has}exists")
 
     def catalog_info(self, tile, catalog):
+        """Retrieve the information about a given catalog.
+
+        tile:
+            The name of the tile.
+
+        catalog:
+            The name of the catalog.
+
+        """
         FORMATTERS = {
             "size": functools.partial(humanize.naturalsize, binary=True),
             "records": humanize.intcomma
@@ -452,7 +488,25 @@ class CLI:
             fmt = FORMATTERS.get(k, str)
             print(f"    - {k}: {fmt(v)}")
 
-    def download_catalog(self, tile, catalog, *, out):
+    def download_catalog(self, tile, catalog, *, force=False, out):
+        """Retrives a catalog from th Carpyncho dataset collection.
+
+        tile:
+            The name of the tile.
+
+        catalog:
+            The name of the catalog.
+
+        out:
+            Path to store the catalog. The extension of the file detemines
+            the format. Options are ".xlsx" (Excel), ".csv",
+            ".pkl" (Python pickle) and ".parquet".
+
+        force:
+            Force to ignore the cached value and redownload the catalog.
+            Try to always set force to False.
+
+        """
         PARSERS = {
             ".xlsx": pd.DataFrame.to_excel,
             ".csv": pd.DataFrame.to_csv,
@@ -474,7 +528,10 @@ def main():
     """Run the carpyncho CLI interface."""
     cli = CLI(client=Carpyncho())
     commands = tuple(cli.get_commands().values())
-    clize.run(*commands)
+    clize.run(
+        *commands,
+        description=cli.__doc__,
+        footnotes=cli.footnotes)
 
 
 if __name__ == "__main__":
