@@ -36,7 +36,7 @@ PATH = pathlib.Path(os.path.abspath(os.path.dirname(__file__)))
 
 REQUIREMENTS = [
     "numpy", "requests", "attrs", "pandas",
-    "diskcache", "tqdm", "clize",
+    "diskcache", "tqdm", "clize", "humanize",
 
     # formats
     "pyarrow", "openpyxl"]

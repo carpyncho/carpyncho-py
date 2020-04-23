@@ -10,12 +10,10 @@
 # DOCS
 # =============================================================================
 
-"""Python client for Carpyncho VVV Data collection
-(https://carpyncho.github.io/)
+"""Python client for Carpyncho VVV dataset collection.
 
-Esta libreria descarga y transforma los datos para una utilización más
-comoda.
-
+This code access as a Pandas Dataframe all the data of the web version of
+Carpyncho. https://carpyncho.github.io/.
 
 """
 
@@ -37,12 +35,15 @@ import pathlib
 import typing as t
 import inspect
 import hashlib
+import functools
 
 import attr
 
 import diskcache as dcache
 
 import tqdm
+
+import humanize
 
 import requests
 
@@ -55,15 +56,22 @@ import pandas as pd
 # CONSTANTS
 # =============================================================================
 
+#: Location of the entire dataset index.
 CARPYNCHO_INDEX_URL = "https://raw.githubusercontent.com/carpyncho/carpyncho-py/master/data/index.json"  # noqa
 
+#: Google drive location.
 DRIVE_URL = "https://docs.google.com/uc?export=download"
 
+
+#: Where carpyncho gonna store the entire data.
 CARPYNCHOPY_DATA_PATH = pathlib.Path(
     os.path.expanduser(os.path.join('~', 'carpyncho_py_data')))
 
+
+#: Chunk size when the library are download the big files of Carpyncho.
 CHUNK_SIZE = 32768
 
+#: The location of the cache catabase and files.
 DEFAULT_CACHE_DIR = CARPYNCHOPY_DATA_PATH / "_cache_"
 
 
@@ -75,11 +83,10 @@ def from_cache(
     cache, tag, function, cache_expire,
     force=False, *args, **kwargs
 ):
-    """Simple cache orchestration.
+    """Simplify cache orchestration.
 
     Parameters
     ----------
-
     tag: str
         Normally every function call the cache with their own tag.
         We sugest "module.function" or "module.Class.function"
@@ -96,6 +103,10 @@ def from_cache(
 
     args and kwargs:
         All the parameters needed to execute the function.
+
+    Returns
+    -------
+    The result of calling the function or the cached version of the same value.
 
     """
     # start the cache orchestration
@@ -124,14 +135,13 @@ def from_cache(
 
 @attr.s(hash=False, frozen=True)
 class Carpyncho:
-    """Client to access the *Carpyncho VVV Data collection*
-    (https://carpyncho.github.io/)
+    """Client to access the *Carpyncho VVV dataset collection*.
+
+    This code access as a Pandas Dataframe all the data of the web version of
+    Carpyncho. https://carpyncho.github.io/.
 
     Parameters
     ----------
-
-    url : ``str`` (default: ``carpyncho.URL``)
-        The endpoint of the carpyncho index file.
     cache : ``diskcache.Cache``, ``diskcache.Fanout``,
         or ``None`` (default: ``None``)
         Any instance of ``diskcache.Cache``, ``diskcache.Fanout`` or
@@ -145,8 +155,13 @@ class Carpyncho:
 
     """
 
+    #: Local cache of the carpyncho database.
     cache: t.Union[dcache.Cache, dcache.FanoutCache] = attr.ib()
-    cache_expire: float = attr.ib(default=3600, repr=False)
+
+    #: Default timout of the catalog-cache.
+    #: Try to always set to None (default), the catalogs are big and mostly
+    #: never change.
+    cache_expire: float = attr.ib(default=None, repr=False)
 
     # =========================================================================
     # ATTRS ORCHESTRATION
@@ -161,8 +176,24 @@ class Carpyncho:
     # =========================================================================
 
     def retrieve_index(self, reset):
+        """Access the remote index of the Carpyncho-Dataset.
+
+        The index is stored internally for 1 hr.
+
+        Parameters
+        ----------
+        reset: bool
+            If its True the entire cache is ignored and a new index is
+            donwloaded and cached.
+
+        Returns
+        -------
+        dict with the index structure.
+
+        """
         def get_and_json(url):
-            return requests.get(url).json()
+            return requests.get(
+                url, headers={'Cache-Control': 'no-cache'}).json()
 
         return from_cache(
             cache=self.cache,
@@ -174,23 +205,80 @@ class Carpyncho:
 
     @property
     def index_(self):
+        """Structure of the Carpyncho dataset information as a Python-dict."""
         return self.retrieve_index(reset=False)
 
     def list_tiles(self):
+        """Retrieve available tiles with catalogs as a tuple of str."""
         index = self.index_
         return tuple(k for k in index.keys() if not k.startswith("_"))
 
     def list_catalogs(self, tile):
+        """Retrieve the available catalogs for a given tile.
+
+        Parameters
+        ----------
+        tile: str
+            The name of the tile to retrieve the catalogs.
+
+        Returns
+        -------
+        tuple of str:
+            The names of available catalogs in the given tile.
+
+        Raises
+        ------
+        ValueError:
+            If the tile is not found.
+
+        """
         index = self.index_
         if tile not in index:
             raise ValueError(f"Tile {tile} not found")
         return tuple(index[tile])
 
     def has_catalog(self, tile, catalog):
+        """Check if a given catalog and tile exists.
+
+        Parameters
+        ----------
+        tile: str
+            The name of the tile.
+        catalog:
+            The name of the catalog.
+
+        Returns
+        -------
+        bool:
+            True if the convination tile+catalog exists.
+
+        """
         cat = self.index_.get(tile, {}).get(catalog)
         return bool(cat)
 
     def catalog_info(self, tile, catalog):
+        """Retrieve the information about a given catalog.
+
+        Parameters
+        ----------
+        tile: str
+            The name of the tile.
+        catalog:
+            The name of the catalog.
+
+        Returns
+        -------
+        dict:
+            The entire information of the given catalog file. This include
+            drive-id, md5 checksum, size in bytes, number of total records,
+            etc.
+
+        Raises
+        ------
+        ValueError:
+            If the tile or the catalog is not found.
+
+        """
         index = self.index_
 
         if tile not in index:
@@ -215,7 +303,9 @@ class Carpyncho:
         # prepare the parameters and download the token
         params = {'id': driveid}
         session = requests.Session()
-        response = session.get(DRIVE_URL, params=params, stream=True)
+        response = session.get(
+            DRIVE_URL, params=params, stream=True,
+            headers={'Cache-Control': 'no-cache'})
 
         # retrieve the token from gdrive page
         token = None
@@ -229,7 +319,9 @@ class Carpyncho:
             params['confirm'] = token
 
         # make the real deal request
-        response = session.get(DRIVE_URL, params=params, stream=True)
+        response = session.get(
+            DRIVE_URL, params=params, stream=True,
+            headers={'Cache-Control': 'no-cache'})
 
         # progress bar
         pbar = tqdm.tqdm(
@@ -266,7 +358,32 @@ class Carpyncho:
         df = pd.read_parquet(parquet_stream)
         return df
 
-    def get_catalog(self, tile, catalog):
+    def get_catalog(self, tile, catalog, force=False):
+        """Retrieve a catalog from the carpyncho dataset.
+
+        Parameters
+        ----------
+        tile: str
+            The name of the tile.
+        catalog:
+            The name of the catalog.
+        force: bool (default=False)
+            If its True, the cached version of the catalog is ignored and
+            redownloaded. Try to always set force to False.
+
+        Returns
+        -------
+        pandas.DataFrame:
+            The columns of the DataFrame changes between the different catalog.
+
+        Raises
+        ------
+        ValueError:
+            If the tile or the catalog is not found.
+        IOError:
+            If the checksum not match.
+
+        """
         info = self.catalog_info(tile, catalog)
         driveid, size = info["driveid"], info["size"]
         md5sum = info["md5sum"].split()[0].strip().lower()
@@ -276,7 +393,7 @@ class Carpyncho:
             tag="get_catalog",
             function=self._grive_download,
             cache_expire=None,
-            force=False,
+            force=force,
 
             # params to _gdrive_download
             tile=tile, catalog=catalog,
@@ -293,20 +410,21 @@ class Carpyncho:
 class CLI:
     """Carpyncho console client.
 
-    This file can explore the entire https://carpyncho.github.io/
+    Explore and download the entire https://carpyncho.github.io/
     catalogs from your command line.
 
     """
 
+    #: Carpyncho client.
     client = attr.ib()
 
-    def get_methods(self):
+    def get_commands(self):
         methods = {}
         for k in dir(self):
             if k.startswith("_"):
                 continue
             v = getattr(self, k)
-            if inspect.ismethod(v) and v is not self.get_methods:
+            if inspect.ismethod(v) and v is not self.get_commands:
                 methods[k] = v
         return methods
 
@@ -324,21 +442,17 @@ class CLI:
         print(f"Catalog '{catalog}' or tile '{tile}': {has}exists")
 
     def catalog_info(self, tile, catalog):
+        FORMATTERS = {
+            "size": functools.partial(humanize.naturalsize, binary=True),
+            "records": humanize.intcomma
+        }
+
         print(f"Catalog {tile}-{catalog}")
         for k, v in self.client.catalog_info(tile, catalog).items():
-            if k == "size":
-                new_v = v / 1024 / 1024
-                unit = "MiB"
-                if new_v < 1:
-                    new_v = v / 1024
-                    unit = "KiB"
-                if new_v < 1:
-                    new_v = v
-                    unit = "B"
-                v = f"{new_v:.2f} {unit}"
-            print(f"    - {k}: {v}")
+            fmt = FORMATTERS.get(k, str)
+            print(f"    - {k}: {fmt(v)}")
 
-    def get_catalog(self, tile, catalog, *, out):
+    def download_catalog(self, tile, catalog, *, out):
         PARSERS = {
             ".xlsx": pd.DataFrame.to_excel,
             ".csv": pd.DataFrame.to_csv,
@@ -357,8 +471,9 @@ class CLI:
 
 
 def main():
+    """Run the carpyncho CLI interface."""
     cli = CLI(client=Carpyncho())
-    commands = tuple(cli.get_methods().values())
+    commands = tuple(cli.get_commands().values())
     clize.run(*commands)
 
 

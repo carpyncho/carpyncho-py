@@ -21,7 +21,15 @@ Warning this code is SLOW!
 # IMPORTS
 # =============================================================================
 
+import os
+import pathlib
+import atexit
+import shutil
+import tempfile
+
 import pytest
+
+import humanize
 
 import pandas as pd
 
@@ -29,15 +37,31 @@ import carpyncho
 
 
 # =============================================================================
-# CLIENT TEST
+# CONSTANTS
+# =============================================================================
+
+PATH = pathlib.Path(os.path.abspath(os.path.dirname(__file__)))
+
+TEST_CACHE_PATH = tempfile.mkdtemp(suffix="_carpyncho_test")
+
+atexit.register(shutil.rmtree, TEST_CACHE_PATH)
+
+
+# =============================================================================
+# FIXTURES
 # =============================================================================
 
 @pytest.fixture
-def client():
+def client(mocker):
+    mocker.patch("carpyncho.DEFAULT_CACHE_DIR", TEST_CACHE_PATH)
     client = carpyncho.Carpyncho()
     client.cache.clear()
     return client
 
+
+# =============================================================================
+# CLIENT TEST
+# =============================================================================
 
 def test_index(client):
     index = client.retrieve_index(reset=True)
@@ -121,27 +145,34 @@ def test_CLI_has_catalog(client, script_runner):
 
 
 def test_CLI_catalog_info(client, script_runner):
+    tile, catalog = "_test", "parquet_bz2_small"
+    info = client.catalog_info(tile, catalog)
+
+    size = humanize.naturalsize(info["size"], binary=True)
+    records = humanize.intcomma(info["records"])
+
     expected = "\n".join([
-        "Catalog _test-parquet_bz2_small",
-        "    - hname: Small parquet file",
-        "    - format: BZIP2-Parquet",
-        "    - extension: .parquet.bz2",
-        "    - date: 2020-04-21",
-        "    - md5sum: 10176f94027db8b636c9683a964cd8dc  small.parquet.bz2",
-        "    - filename: small.parquet.bz2",
-        "    - driveid: 1U_-8JMwnOLaXyDZp2_CgBX3WxxR7qnI4",
-        "    - size: 2.96 KiB"])
+        f"Catalog {tile}-{catalog}",
+        f"    - hname: {info['hname']}",
+        f"    - format: {info['format']}",
+        f"    - extension: {info['extension']}",
+        f"    - date: {info['date']}",
+        f"    - md5sum: {info['md5sum']}",
+        f"    - filename: {info['filename']}",
+        f"    - driveid: {info['driveid']}",
+        f"    - size: {size}",
+        f"    - records: {records}"])
 
     ret = script_runner.run(
-        'carpyncho', "catalog-info", "_test", "parquet_bz2_small")
+        'carpyncho', "catalog-info", tile, catalog)
 
     assert ret.stdout.strip() == expected
     assert ret.stderr == ''
 
 
-def test_CLI_get_catalog(client, script_runner):
+def test_CLI_download_catalog(client, script_runner):
     ret = script_runner.run(
-        'carpyncho', "get-catalog",
+        'carpyncho', "download-catalog",
         "_test", "parquet_bz2_small", "--out", "test.csv")
     assert ret.stdout.strip() == 'Writing test.csv...'
     assert "_test-parquet_bz2_small: " in ret.stderr
