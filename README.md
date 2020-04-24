@@ -73,90 +73,11 @@ $ cd carpyncho
 $ pip install -e .
 ```
 
-## Command line interface (`CLI`)
+## Tutorials
 
-After install carpyncho you also have a command line app to download the
-data as `csv`/`xlsx`/`parquet`/`pickle`.
+- [Introduction](tutorials/00_Intro.ipynb)
+- [Command Line Interface](tutorials/01_cli.ipynb) (If you don't want to use Python)
 
-```console
-
-$ carpyncho --help
-Usage: carpyncho command [args...]
-
-Carpyncho console client.
-
-Explore and download the entire https://carpyncho.github.io/ catalogs from your command line.
-
-Commands:
-  catalog-info       Retrieve the information about a given catalog.
-  download-catalog   Retrives a catalog from th Carpyncho dataset collection.
-  has-catalog        Check if a given catalog and tile exists.
-  list-catalogs      Show the available catalogs for a given tile.
-  list-tiles         Show available tiles.
-  version            Print Carpyncho version.
-
-This software is under the BSD 3-Clause License.
-Copyright (c) 2020, Juan Cabral.
-For bug reporting or other instructions please check:
-https://github.com/carpyncho/carpyncho-py
-
-```
-
-To list all availables tiles you can run
-
-``` console
-$ carpyncho list-tiles
-- b206
-- b214
-- b216
-...
-```
-
-Then you can check the available catalogs for a given tile with
-
-```console
-$ carpyncho list-catalogs b216
-Tile b216
-    - features
-    - lc
-```
-
-Lets asume we want to download the catalog *features* from the tile *b216*.
-First lets check how big is the catalog before download:
-
-```console
-carpyncho catalog-info b216 features
-Catalog b216-features
-    - hname: Features
-    - format: BZIP2-Parquet
-    - extension: .parquet.bz2
-    - date: 2020-04-14
-    - md5sum: 433aae05541a2f5b191aa95d717fa83c  features_b216.parquet.bz2
-    - filename: features_b216.parquet.bz2
-    - driveid: 1-t165sLjn0k507SFeW-A4p9wYVL9rP4B
-    - size: 142.2 MiB
-    - records: 334,773
-```
-
-Well `142 MiB` for `334773` rows in the table, lets download it and sotore
-it in `csv` format
-
-```console
-$ carpyncho download-catalog b216 features --out b216_features.csv
-b216-features:   100%|█████████████████████████████| 149M/149M [02:15, 1.10Mb/s]
-Writing b216_features.csv...
-```
-
-Now lets check the size and the checksum to see if it's correct
-(warning this is linux and mac only)
-
-```console
-$ cat b216_features.csv | wc
-334774
-
-```
-
-The rows are ok, so it's done.
 
 ## Contact
 
