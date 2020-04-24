@@ -421,7 +421,7 @@ class CLI:
         "This software is under the BSD 3-Clause License.",
         "Copyright (c) 2020, Juan Cabral.",
         "For bug reporting or other instructions please check:"
-        "https://github.com/carpyncho/carpyncho-py"])
+        " https://github.com/carpyncho/carpyncho-py"])
 
     #: Carpyncho client.
     client = attr.ib()
