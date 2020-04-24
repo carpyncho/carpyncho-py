@@ -12,8 +12,8 @@
 
 """Python client for Carpyncho VVV dataset collection.
 
-This code access as a Pandas Dataframe all the data of the web version of
-Carpyncho. https://carpyncho.github.io/.
+This code access as a Pandas DataFrame all the data of the web version of
+Carpyncho https://carpyncho.github.io/.
 
 """
 

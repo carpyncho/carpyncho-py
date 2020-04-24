@@ -1,9 +1,20 @@
-# Carpyncho client for python
+# Carpyncho client for Python
+
+> Python client for Carpyncho VVV dataset collection.
 
 [![Build Status](https://travis-ci.org/carpyncho/carpyncho-py.svg?branch=master)](https://travis-ci.org/carpyncho/carpyncho-py)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3762842.svg)](https://doi.org/10.5281/zenodo.3762842)
 [![Python 3](https://img.shields.io/badge/python-3.7+-blue.svg)](https://badge.fury.io/py/carpyncho)
 [![BSD-3](https://img.shields.io/badge/License-BSD3-blue.svg)](https://tldrlegal.com/license/bsd-3-clause-license-(revised))
+
+[![Logo](https://github.com/carpyncho/carpyncho.github.io/raw/master/static/logo.png)](https://carpyncho.github.io/)
+
+This code access as a [Pandas DataFrame](https://pandas.pydata.org/) all the data of the web version of
+Carpyncho [https://carpyncho.github.io/](https://carpyncho.github.io/).
+
+
+
+
 
 ## License
 
@@ -77,6 +88,10 @@ $ pip install -e .
 
 - [Introduction](tutorials/00_Intro.ipynb)
 - [Command Line Interface](tutorials/01_cli.ipynb) (If you don't want to use Python)
+- Catalogs tutorials:
+  - [Lightcurves (`lc`)](tutorials/02_lc.ipynb)
+  - [Features (`features`)](tutorials/03_features.ipynb)
+  - [Carpyncho RR-Lyrae (`cpyrrl`)](tutorials/04_cpyrrl.ipynb)
 
 
 ## Contact
