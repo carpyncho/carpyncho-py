@@ -89,9 +89,9 @@ $ pip install -e .
 - [Introduction](tutorials/00_Intro.ipynb)
 - [Command Line Interface](tutorials/01_cli.ipynb) (If you don't want to use Python)
 - Catalogs tutorials:
-  - [Lightcurves (`lc`)](tutorials/02_lc.ipynb)
-  - [Features (`features`)](tutorials/03_features.ipynb)
-  - [Carpyncho RR-Lyrae (`cpyrrl`)](tutorials/04_cpyrrl.ipynb)
+  - [Lightcurves (`lc`)](tutorials/catalogs/00_lc.ipynb)
+  - [Features (`features`)](tutorials/catalogs/01_features.ipynb)
+  - [Carpyncho RR-Lyrae (`cpyrrl`)](tutorials/catalogs/02_cpyrrl.ipynb)
 
 
 ## Contact

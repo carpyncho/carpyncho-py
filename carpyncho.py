@@ -73,6 +73,9 @@ CARPYNCHOPY_DATA_PATH = pathlib.Path(
 #: Chunk size when the library are download the big files of Carpyncho.
 CHUNK_SIZE = 32768
 
+#: Maximun cache size (10TB)
+DEFAULT_CACHE_SIZE_LIMIT = int(1e10)
+
 #: The location of the cache catabase and files.
 DEFAULT_CACHE_DIR = CARPYNCHOPY_DATA_PATH / "_cache_"
 
@@ -171,7 +174,8 @@ class Carpyncho:
 
     @cache.default
     def _cache_default(self):
-        return dcache.Cache(directory=DEFAULT_CACHE_DIR)
+        return dcache.Cache(
+            directory=DEFAULT_CACHE_DIR, size_limit=DEFAULT_CACHE_SIZE_LIMIT)
 
     # =========================================================================
     # UTILITIES FOR CHECK THE REMOTE DATA
