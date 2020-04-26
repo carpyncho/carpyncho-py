@@ -22,7 +22,12 @@ The BSD 3-clause license allows you almost unlimited freedom with the software s
 
 ## Citation
 
-Please cite:
+Please cite this paper
+
+
+
+
+This software is also registered in Zenodo as:
 
 > J.B.Cabral. (2020, April 23). carpyncho/carpyncho-py: First version (no docs) (Version 0.0.1). Zenodo. http://doi.org/10.5281/zenodo.3762842
 
