@@ -13,6 +13,11 @@
 This library access as a [Pandas DataFrame](https://pandas.pydata.org/) all the data of the web version of
 Carpyncho [https://carpyncho.github.io/](https://carpyncho.github.io/).
 
+## Code
+
+The entire source code of is hosted in GitHub
+[https://github.com/carpyncho/carpyncho-py/](https://github.com/carpyncho/carpyncho-py/)
+
 ## License
 
 Carpyncho is under
