@@ -6,6 +6,7 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3762842.svg)](https://doi.org/10.5281/zenodo.3762842)
 [![Python 3](https://img.shields.io/badge/python-3.7+-blue.svg)](https://badge.fury.io/py/carpyncho)
 [![BSD-3](https://img.shields.io/badge/License-BSD3-blue.svg)](https://www.tldrlegal.com/l/bsd3)
+[![Documentation Status](https://readthedocs.org/projects/carpyncho-py/badge/?version=latest)](https://carpyncho-py.readthedocs.io/en/latest/?badge=latest)
 
 [![Logo](https://github.com/carpyncho/carpyncho.github.io/raw/master/static/logo.png)](https://carpyncho.github.io/)
 
@@ -82,7 +83,8 @@ $ pip install -e .
 
 ## Documentation
 
-fo del faa
+The full documentation of the project are available in
+[https://carpyncho-py.readthedocs.io/](https://carpyncho-py.readthedocs.io/)
 
 ## Contact
 

@@ -44,10 +44,7 @@ REQUIREMENTS = [
 with open(PATH / "README.md") as fp:
     LONG_DESCRIPTION = fp.read()
 
-DESCRIPTION = [
-    line for line in
-    LONG_DESCRIPTION.split("Description\n-----------", 1)[-1].splitlines()
-    if line.strip()][0]
+DESCRIPTION = "Python client for Carpyncho VVV dataset collection."
 
 with open(PATH / "carpyncho.py") as fp:
     VERSION = [
@@ -65,9 +62,10 @@ def do_setup():
         version=VERSION,
         description=DESCRIPTION,
         long_description=LONG_DESCRIPTION,
-        author="QuatroPe",
+        long_description_content_type='text/markdown',
+        author="J.B. Cabral",
         author_email="jbc.develop@gmail.com",
-        url="https://github.com/carpyncho/carpyncho-py",
+        url="https://carpyncho-py.readthedocs.io/",
         license="3 Clause BSD",
         keywords=[
             "astronomy", "vvv", "catalogs"],
