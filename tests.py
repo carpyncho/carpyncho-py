@@ -26,6 +26,7 @@ import pathlib
 import atexit
 import shutil
 import tempfile
+import json
 
 import pytest
 
@@ -178,3 +179,29 @@ def test_CLI_download_catalog(client, script_runner):
         "_test", "parquet_bz2_small", "--out", outpath)
     assert ret.stdout.strip() == f'Writing {outpath}...'
     assert "_test-parquet_bz2_small: " in ret.stderr
+
+
+# =============================================================================
+# INDEX JSON TEST
+# =============================================================================
+
+def test_parse_index():
+    schema = {
+        "hname": str,
+        "format": str,
+        "extension": str,
+        "date": str,
+        "md5sum": str,
+        "filename": str,
+        "driveid": str,
+        "size": int,
+        "records": int
+    }
+
+    with open(PATH / "data" / "index.json") as fp:
+        index = json.load(fp)
+    for tile, tdata in index.items():
+        for cat, cdata in tdata.items():
+            for k, v in cdata.items():
+                assert k in schema
+                assert isinstance(v, schema[k])
