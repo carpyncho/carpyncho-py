@@ -5,16 +5,12 @@
 [![Build Status](https://travis-ci.org/carpyncho/carpyncho-py.svg?branch=master)](https://travis-ci.org/carpyncho/carpyncho-py)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3762842.svg)](https://doi.org/10.5281/zenodo.3762842)
 [![Python 3](https://img.shields.io/badge/python-3.7+-blue.svg)](https://badge.fury.io/py/carpyncho)
-[![BSD-3](https://img.shields.io/badge/License-BSD3-blue.svg)](https://tldrlegal.com/license/bsd-3-clause-license-(revised))
+[![BSD-3](https://img.shields.io/badge/License-BSD3-blue.svg)](https://www.tldrlegal.com/l/bsd3)
 
 [![Logo](https://github.com/carpyncho/carpyncho.github.io/raw/master/static/logo.png)](https://carpyncho.github.io/)
 
-This code access as a [Pandas DataFrame](https://pandas.pydata.org/) all the data of the web version of
+This library access as a [Pandas DataFrame](https://pandas.pydata.org/) all the data of the web version of
 Carpyncho [https://carpyncho.github.io/](https://carpyncho.github.io/).
-
-
-
-
 
 ## License
 
@@ -25,13 +21,11 @@ The BSD 3-clause license allows you almost unlimited freedom with the software s
 
 ## Citation
 
-
 Please cite:
 
->    J.B.Cabral. (2020, April 23). carpyncho/carpyncho-py: First version (no docs) (Version 0.0.1). Zenodo. http://doi.org/10.5281/zenodo.3762842
+> J.B.Cabral. (2020, April 23). carpyncho/carpyncho-py: First version (no docs) (Version 0.0.1). Zenodo. http://doi.org/10.5281/zenodo.3762842
 
-
-``` bibtext
+``` bib
     @software{juan_bc_2020_3762842,
         author       = {J.B. Cabral},
         title        = {carpyncho/carpyncho-py: First version (no docs)},
@@ -46,7 +40,6 @@ Please cite:
 
 ## Installation
 
-
 This is the recommended way to install carpyncho.
 
 ### Installing  with pip
@@ -58,6 +51,7 @@ After setting up and activating the virtualenv, run the following command:
 
 ``` console
 $ pip install carpyncho
+...
 ```
 
 That should be it all.
@@ -73,6 +67,7 @@ Check out carpyncho main development branch like so:
 
 ``` console
 $ git clone https://github.com/carpyncho/carpyncho-py.git carpyncho
+...
 ```
 
 This will create a directory *carpyncho* in your current directory.
@@ -82,14 +77,12 @@ Then you can proceed to install with the commands
 ```console
 $ cd carpyncho
 $ pip install -e .
+...
 ```
 
-## Tutorials
+## Documentation
 
-- [Introduction](tutorials/00_Intro.ipynb).
-- [Command Line Interface](tutorials/01_cli.ipynb) (If you don't want to use Python).
-- [Catalogs tutorials](tutorials/catalogs/README.md).
-
+fo del faa
 
 ## Contact
 
