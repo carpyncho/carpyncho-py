@@ -16,7 +16,7 @@ matrix:
     include:
 
       - python: 3.8
-        env: TOXENV=docss
+        env: TOXENV=docs
         dist: xenial
         sudo: true
 
