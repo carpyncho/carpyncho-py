@@ -129,4 +129,6 @@ dmypy.json
 .pyre/
 .vscode/
 docs/source/index.rst
-b216_features.csv
+*_features.csv
+data/local_*
+
