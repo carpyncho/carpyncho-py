@@ -10,7 +10,7 @@
 # DOCS
 # =============================================================================
 
-"""Integration Test for carpyncho)
+"""Integration Test for carpyncho.
 
 Warning this code is SLOW!
 
@@ -26,7 +26,6 @@ import pathlib
 import atexit
 import shutil
 import tempfile
-import json
 
 import pytest
 
