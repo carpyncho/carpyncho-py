@@ -43,6 +43,8 @@ import carpyncho
 
 PATH = pathlib.Path(os.path.abspath(os.path.dirname(__file__)))
 
+LOCAL_INDEX = str(PATH / "data" / "index.json")
+
 TEST_CACHE_PATH = tempfile.mkdtemp(suffix="_carpyncho_test")
 
 atexit.register(shutil.rmtree, TEST_CACHE_PATH)
@@ -54,8 +56,18 @@ atexit.register(shutil.rmtree, TEST_CACHE_PATH)
 
 @pytest.fixture
 def client(mocker):
-    mocker.patch("carpyncho.DEFAULT_CACHE_DIR", TEST_CACHE_PATH)
-    client = carpyncho.Carpyncho()
+    cache_dir = os.path.join(TEST_CACHE_PATH, "local")
+    mocker.patch("carpyncho.DEFAULT_CACHE_DIR", cache_dir)
+    client = carpyncho.Carpyncho(index_url=LOCAL_INDEX)
+    client.cache.clear()
+    return client
+
+
+@pytest.fixture
+def remote_client(mocker):
+    cache_dir = os.path.join(TEST_CACHE_PATH, "remote")
+    mocker.patch("carpyncho.DEFAULT_CACHE_DIR", cache_dir)
+    client = carpyncho.Carpyncho(index_url=carpyncho.CARPYNCHO_INDEX_URL)
     client.cache.clear()
     return client
 
@@ -185,7 +197,7 @@ def test_CLI_download_catalog(client, script_runner):
 # INDEX JSON TEST
 # =============================================================================
 
-def test_parse_index():
+def test_parse_local_index(client):
     schema = {
         "hname": str,
         "format": str,
@@ -197,11 +209,31 @@ def test_parse_index():
         "size": int,
         "records": int
     }
-
-    with open(PATH / "data" / "index.json") as fp:
-        index = json.load(fp)
+    index = client.retrieve_index(reset=True)
     for tile, tdata in index.items():
         for cat, cdata in tdata.items():
             for k, v in cdata.items():
                 assert k in schema
                 assert isinstance(v, schema[k])
+    assert index == client.index_
+
+
+def test_parse_remove_index(remote_client):
+    schema = {
+        "hname": str,
+        "format": str,
+        "extension": str,
+        "date": str,
+        "md5sum": str,
+        "filename": str,
+        "driveid": str,
+        "size": int,
+        "records": int
+    }
+    index = remote_client.retrieve_index(reset=True)
+    for tile, tdata in index.items():
+        for cat, cdata in tdata.items():
+            for k, v in cdata.items():
+                assert k in schema
+                assert isinstance(v, schema[k])
+    assert index == remote_client.index_

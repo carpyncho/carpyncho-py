@@ -36,6 +36,8 @@ import typing as t
 import inspect
 import hashlib
 import functools
+import urllib
+import json
 
 import attr
 
@@ -168,6 +170,9 @@ class Carpyncho:
     #: never change.
     cache_expire: float = attr.ib(default=None, repr=False)
 
+    #: Location of the carpyncho index (usefull for development)
+    index_url: str = attr.ib(default=CARPYNCHO_INDEX_URL)
+
     # =========================================================================
     # ATTRS ORCHESTRATION
     # =========================================================================
@@ -197,17 +202,21 @@ class Carpyncho:
         dict with the index structure.
 
         """
-        def get_and_json(url):
-            return requests.get(
-                url, headers={'Cache-Control': 'no-cache'}).json()
+        def get_json_data(url):
+            parsed = urllib.parse.urlparse(url)
+            if parsed.scheme in ("http", "https", "ftp"):
+                return requests.get(
+                    url, headers={'Cache-Control': 'no-cache'}).json()
+            with open(url) as fp:
+                return json.load(fp)
 
         return from_cache(
             cache=self.cache,
             tag="get_index",
-            function=get_and_json,
+            function=get_json_data,
             cache_expire=3600,
             force=reset,
-            url=CARPYNCHO_INDEX_URL)
+            url=self.index_url)
 
     @property
     def index_(self):
