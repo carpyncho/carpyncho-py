@@ -10,3 +10,4 @@ catalogs offered by carpyncho.
 
     00_lc.ipynb
     01_features.ipynb
+    02_cpy_rr_v1.ipynb
