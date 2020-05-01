@@ -205,8 +205,9 @@ class Carpyncho:
         def get_json_data(url):
             parsed = urllib.parse.urlparse(url)
             if parsed.scheme in ("http", "https", "ftp"):
-                return requests.get(
-                    url, headers={'Cache-Control': 'no-cache'}).json()
+                response = requests.get(
+                    url, headers={'Cache-Control': 'no-cache'})
+                return response.json()
             with open(url) as fp:
                 return json.load(fp)
 

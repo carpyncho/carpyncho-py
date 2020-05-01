@@ -217,7 +217,7 @@ def test_parse_local_index(client):
     assert index == client.index_
 
 
-def test_parse_remove_index(remote_client):
+def test_parse_remote_index(remote_client):
     schema = {
         "hname": str,
         "format": str,
