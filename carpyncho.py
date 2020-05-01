@@ -21,7 +21,7 @@ Carpyncho https://carpyncho.github.io/.
 __all__ = ["Carpyncho", "CARPYNCHOPY_DATA_PATH"]
 
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
 
 # =============================================================================
