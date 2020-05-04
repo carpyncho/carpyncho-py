@@ -3,7 +3,7 @@
 > Python client for Carpyncho VVV dataset collection.
 
 [![Build Status](https://travis-ci.org/carpyncho/carpyncho-py.svg?branch=master)](https://travis-ci.org/carpyncho/carpyncho-py)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3762841.svg)](https://doi.org/10.5281/zenodo.3762841)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3779502.svg)](https://doi.org/10.5281/zenodo.3779502)
 [![Python 3](https://img.shields.io/badge/python-3.7+-blue.svg)](https://badge.fury.io/py/carpyncho)
 [![BSD-3](https://img.shields.io/badge/License-BSD3-blue.svg)](https://www.tldrlegal.com/l/bsd3)
 [![Documentation Status](https://readthedocs.org/projects/carpyncho-py/badge/?version=latest)](https://carpyncho-py.readthedocs.io/en/latest/?badge=latest)
@@ -27,26 +27,29 @@ The BSD 3-clause license allows you almost unlimited freedom with the software s
 
 ## Citation
 
-Please cite this paper
+If you use Carpyncho in a scientific publication, we would appreciate
+citations to the following paper:
 
+> Cabral, J. B., Ramos, F., Gurovich, S., & Granitto, P. (2020).
+> Automatic Catalog of RRLyrae from ∼ 14 million VVV Light Curves:
+> How far can we go with traditional machine-learning?
+> https://arxiv.org/abs/2005.00220
 
+Bibtex entry
 
-
-This software is also registered in Zenodo as:
-
-> J.B.Cabral. (2020, April 23). carpyncho/carpyncho-py: First version (no docs) (Version 0.0.1). Zenodo. http://doi.org/10.5281/zenodo.3762842
-
-``` bib
-    @software{juan_bc_2020_3762842,
-        author       = {J.B. Cabral},
-        title        = {carpyncho/carpyncho-py: First version (no docs)},
-        month        = apr,
-        year         = 2020,
-        publisher    = {Zenodo},
-        version      = {0.0.1},
-        doi          = {10.5281/zenodo.3762842},
-        url          = {https://doi.org/10.5281/zenodo.3762842}
-    }
+```bib
+@Article{cabral:2020,
+  author      = {J. B. Cabral AND F. Ramos AND S. Gurovich AND P. Granitto},
+  title       = {Automatic Catalog of RRLyrae from ∼ 14 million VVV
+                 Light Curves: How far can we go with traditional
+                 machine-learning?},
+  version     = {1},
+  date        = {2020-05-03},
+  eprinttype  = {arxiv},
+  eprintclass = {astro-ph.IM, cs.LG, astro-ph.SR, cs.LG, stat.ML},
+  eprint      = {https://arxiv.org/abs/2005.00220},
+  url         = {https://arxiv.org/abs/2005.00220}
+}
 ```
 
 ## Installation
