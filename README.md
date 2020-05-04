@@ -40,16 +40,16 @@ Bibtex entry
 
 ```bib
 @Article{cabral:2020,
-  author      = {J. B. Cabral AND F. Ramos AND S. Gurovich AND P. Granitto},
-  title       = {Automatic Catalog of RRLyrae from ∼ 14 million VVV
-                 Light Curves: How far can we go with traditional
-                 machine-learning?},
+  author      = {Juan B. Cabral AND Felipe Ramos AND Sebastián Gurovich AND Pablo Granitto},
+  title       = {
+    Automatic Catalog of RRLyrae from $\sim$ 14 million VVV
+    Light Curves: How far can we go with traditional machine-learning?},
   version     = {1},
-  date        = {2020-05-03},
+  date        = {2020-05-01},
   eprinttype  = {arxiv},
-  eprintclass = {astro-ph.IM, cs.LG, astro-ph.SR, cs.LG, stat.ML},
-  eprint      = {https://arxiv.org/abs/2005.00220},
-  url         = {https://arxiv.org/abs/2005.00220}
+  eprintclass = {astro-ph.IM, astro-ph.SR, cs.LG, stat.ML},
+  eprint      = {http://arxiv.org/abs/2005.00220v1},
+  url         = {http://arxiv.org/abs/2005.00220v1}
 }
 ```
 
