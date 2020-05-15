@@ -137,7 +137,7 @@ def test_CLI_list_tiles(client, script_runner):
 
 def test_CLI_list_catalogs(client, script_runner):
     expected = (
-        f"Tile _test\n" + "\n".join(
+        "Tile _test\n" + "\n".join(
             f"    - {c}" for c in client.list_catalogs("_test")))
     ret = script_runner.run('carpyncho', "list-catalogs", "_test")
     assert ret.stdout.strip() == expected

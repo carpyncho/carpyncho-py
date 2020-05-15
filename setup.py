@@ -48,7 +48,7 @@ DESCRIPTION = "Python client for Carpyncho VVV dataset collection."
 
 with open(PATH / "carpyncho.py") as fp:
     VERSION = [
-        l for l in fp.readlines() if l.startswith("__version__")
+        line for line in fp.readlines() if line.startswith("__version__")
     ][0].split("=", 1)[-1].strip().replace('"', "")
 
 
