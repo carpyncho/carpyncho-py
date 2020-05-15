@@ -38,7 +38,7 @@
       "records": 407720
     },
     "lc": {
-      "hname": "Time-Serie",
+      "hname": "Time-Series",
       "format": "BZIP2-Parquet",
       "extension": ".parquet.bz2",
       "date": "2020-04-14",
@@ -62,7 +62,7 @@
       "records": 376822
     },
     "lc": {
-      "hname": "Time-Serie",
+      "hname": "Time-Series",
       "format": "BZIP2-Parquet",
       "extension": ".parquet.bz2",
       "date": "2020-04-14",
@@ -86,7 +86,7 @@
       "records": 334773
     },
     "lc": {
-      "hname": "Time-Serie",
+      "hname": "Time-Series",
       "format": "BZIP2-Parquet",
       "extension": ".parquet.bz2",
       "date": "2020-04-14",
@@ -110,7 +110,7 @@
       "records": 431823
     },
     "lc": {
-      "hname": "Time-Serie",
+      "hname": "Time-Series",
       "format": "BZIP2-Parquet",
       "extension": ".parquet.bz2",
       "date": "2020-04-14",
@@ -134,7 +134,7 @@
       "records": 477832
     },
     "lc": {
-      "hname": "Time-Serie",
+      "hname": "Time-Series",
       "format": "BZIP2-Parquet",
       "extension": ".parquet.bz2",
       "date": "2020-04-14",
@@ -158,7 +158,7 @@
       "records": 540218
     },
     "lc": {
-      "hname": "Time-Serie",
+      "hname": "Time-Series",
       "format": "BZIP2-Parquet",
       "extension": ".parquet.bz2",
       "date": "2020-04-14",
@@ -182,7 +182,7 @@
       "records": 658601
     },
     "lc": {
-      "hname": "Time-Serie",
+      "hname": "Time-Series",
       "format": "BZIP2-Parquet",
       "extension": ".parquet.bz2",
       "date": "2020-04-14",
@@ -206,7 +206,7 @@
       "records": 678744
     },
     "lc": {
-      "hname": "Time-Serie",
+      "hname": "Time-Series",
       "format": "BZIP2-Parquet",
       "extension": ".parquet.bz2",
       "date": "2020-04-14",
@@ -230,7 +230,7 @@
       "records": 739719
     },
     "lc": {
-      "hname": "Time-Serie",
+      "hname": "Time-Series",
       "format": "BZIP2-Parquet",
       "extension": ".parquet.bz2",
       "date": "2020-04-14",
@@ -254,7 +254,7 @@
       "records": 779283
     },
     "lc": {
-      "hname": "Time-Serie",
+      "hname": "Time-Series",
       "format": "BZIP2-Parquet",
       "extension": ".parquet.bz2",
       "date": "2020-04-14",
@@ -278,7 +278,7 @@
       "records": 769084
     },
     "lc": {
-      "hname": "Time-Serie",
+      "hname": "Time-Series",
       "format": "BZIP2-Parquet",
       "extension": ".parquet.bz2",
       "date": "2020-04-14",
@@ -302,7 +302,7 @@
       "records": 798205
     },
     "lc": {
-      "hname": "Time-Serie",
+      "hname": "Time-Series",
       "format": "BZIP2-Parquet",
       "extension": ".parquet.bz2",
       "date": "2020-04-14",
@@ -326,7 +326,7 @@
       "records": 838925
     },
     "lc": {
-      "hname": "Time-Serie",
+      "hname": "Time-Series",
       "format": "BZIP2-Parquet",
       "extension": ".parquet.bz2",
       "date": "2020-04-14",
@@ -350,7 +350,7 @@
       "records": 866883
     },
     "lc": {
-      "hname": "Time-Serie",
+      "hname": "Time-Series",
       "format": "BZIP2-Parquet",
       "extension": ".parquet.bz2",
       "date": "2020-04-14",
@@ -374,7 +374,7 @@
       "records": 788976
     },
     "lc": {
-      "hname": "Time-Serie",
+      "hname": "Time-Series",
       "format": "BZIP2-Parquet",
       "extension": ".parquet.bz2",
       "date": "2020-04-14",
@@ -398,7 +398,7 @@
       "records": 1031847
     },
     "lc": {
-      "hname": "Time-Serie",
+      "hname": "Time-Series",
       "format": "BZIP2-Parquet",
       "extension": ".parquet.bz2",
       "date": "2020-04-14",
@@ -422,7 +422,7 @@
       "records": 729825
     },
     "lc": {
-      "hname": "Time-Serie",
+      "hname": "Time-Series",
       "format": "BZIP2-Parquet",
       "extension": ".parquet.bz2",
       "date": "2020-04-14",
