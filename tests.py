@@ -26,8 +26,11 @@ import pathlib
 import atexit
 import shutil
 import tempfile
+import uuid
 
 import pytest
+
+import numpy as np
 
 import humanize
 
@@ -54,21 +57,25 @@ atexit.register(shutil.rmtree, TEST_CACHE_PATH)
 # =============================================================================
 
 @pytest.fixture
-def client(mocker):
-    cache_dir = os.path.join(TEST_CACHE_PATH, "local")
-    mocker.patch("carpyncho.DEFAULT_CACHE_DIR", cache_dir)
-    client = carpyncho.Carpyncho(index_url=LOCAL_INDEX)
-    client.cache.clear()
-    return client
+def client_maker(mocker):
+    def maker(**kwargs):
+        tuid = str(uuid.uuid1())
+        cache_dir = os.path.join(TEST_CACHE_PATH, tuid)
+        mocker.patch("carpyncho.DEFAULT_CACHE_DIR", cache_dir)
+        client = carpyncho.Carpyncho(**kwargs)
+        client.cache.clear()
+        return client
+    return maker
 
 
 @pytest.fixture
-def remote_client(mocker):
-    cache_dir = os.path.join(TEST_CACHE_PATH, "remote")
-    mocker.patch("carpyncho.DEFAULT_CACHE_DIR", cache_dir)
-    client = carpyncho.Carpyncho(index_url=carpyncho.CARPYNCHO_INDEX_URL)
-    client.cache.clear()
-    return client
+def client(client_maker):
+    return client_maker(index_url=LOCAL_INDEX)
+
+
+@pytest.fixture
+def remote_client(client_maker):
+    return client_maker(index_url=carpyncho.CARPYNCHO_INDEX_URL)
 
 
 # =============================================================================
@@ -236,3 +243,37 @@ def test_parse_remote_index(remote_client):
                 assert k in schema
                 assert isinstance(v, schema[k])
     assert index == remote_client.index_
+
+
+# =============================================================================
+# TEST ENGINES
+# =============================================================================
+
+def test_parquet_engines(client_maker):
+    clients = [
+        client_maker(index_url=LOCAL_INDEX),
+        client_maker(index_url=LOCAL_INDEX, parquet_engine="auto"),
+        client_maker(index_url=LOCAL_INDEX, parquet_engine="pyarrow"),
+        client_maker(index_url=LOCAL_INDEX, parquet_engine="fastparquet")]
+
+    results = [
+        client.get_catalog("_test", "parquet_bz2_small")
+        for client in clients]
+
+    checks = [np.all(results[0] == rst) for rst in results[1:]]
+    assert np.all(checks)
+
+
+def test_CLI_parquet_engines(client, script_runner):
+
+    results = []
+    for engine in ["auto", "pyarrow", "fastparquet"]:
+        outpath = os.path.join(TEST_CACHE_PATH, f"test_{engine}.csv")
+        script_runner.run(
+            'carpyncho', "download-catalog",
+            "_test", "parquet_bz2_small",
+            "--out", outpath, "--parquet-engine", engine, "--force")
+        results.append(pd.read_csv(outpath))
+
+    checks = [np.all(results[0] == rst) for rst in results[1:]]
+    assert np.all(checks)

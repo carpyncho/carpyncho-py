@@ -21,7 +21,7 @@ Carpyncho https://carpyncho.github.io/.
 __all__ = ["Carpyncho", "CARPYNCHOPY_DATA_PATH"]
 
 
-__version__ = "0.0.5"
+__version__ = "0.0.6"
 
 
 # =============================================================================
@@ -80,6 +80,9 @@ DEFAULT_CACHE_SIZE_LIMIT = int(1e10)
 
 #: The location of the cache catabase and files.
 DEFAULT_CACHE_DIR = CARPYNCHOPY_DATA_PATH / "_cache_"
+
+#: The default carpyncho parquet default
+DEFAULT_PARQUET_ENGINE = "auto"
 
 
 # =============================================================================
@@ -159,6 +162,14 @@ class Carpyncho:
     cache_expire : ``float`` or None (default=``None``)
         Seconds until item expires (default ``None``, no expiry)
         More information: http://www.grantjenks.com/docs/diskcache
+    parquet_engine : ``str`` (default="auto")
+        Default Parquet library to use.
+        Remotely carpyncho stores all the data as compresses parquet files;
+        When the download happend a this must be parsed.
+        If ‘auto’, then the option io.parquet.engine is used.
+        The default io.parquet.engine behavior is to try ‘pyarrow’, falling
+        back to ‘fastparquet’ if ‘pyarrow’ is unavailable.
+
 
     """
 
@@ -169,6 +180,9 @@ class Carpyncho:
     #: Try to always set to None (default), the catalogs are big and mostly
     #: never change.
     cache_expire: float = attr.ib(default=None, repr=False)
+
+    #: Default Parquet library to use.
+    parquet_engine: str = attr.ib(DEFAULT_PARQUET_ENGINE)
 
     #: Location of the carpyncho index (usefull for development)
     index_url: str = attr.ib(default=CARPYNCHO_INDEX_URL)
@@ -371,7 +385,8 @@ class Carpyncho:
                 f"caclulated: {file_hash.hexdigest()}")
 
         # read the entire stream into a dataframe
-        df = pd.read_parquet(parquet_stream)
+        parquet_stream.seek(0)
+        df = pd.read_parquet(parquet_stream, engine=self.parquet_engine)
         return df
 
     def get_catalog(self, tile, catalog, force=False):
@@ -408,7 +423,7 @@ class Carpyncho:
             cache=self.cache,
             tag="get_catalog",
             function=self._grive_download,
-            cache_expire=None,
+            cache_expire=self.cache_expire,
             force=force,
 
             # params to _gdrive_download
@@ -422,7 +437,6 @@ class Carpyncho:
 # CLI
 # =============================================================================
 
-@attr.s(hash=False, frozen=True)
 class CLI:
     """Carpyncho console client.
 
@@ -436,9 +450,6 @@ class CLI:
         "Copyright (c) 2020, Juan Cabral.",
         "For bug reporting or other instructions please check:"
         " https://github.com/carpyncho/carpyncho-py"])
-
-    #: Carpyncho client.
-    client = attr.ib()
 
     def get_commands(self):
         methods = {}
@@ -456,7 +467,8 @@ class CLI:
 
     def list_tiles(self):
         """Show available tiles."""
-        for tile in self.client.list_tiles():
+        client = Carpyncho()
+        for tile in client.list_tiles():
             print(f"- {tile}")
 
     def list_catalogs(self, tile):
@@ -466,8 +478,9 @@ class CLI:
             The name of the tile to retrieve the catalogs.
 
         """
+        client = Carpyncho()
         print(f"Tile {tile}")
-        for catalog in self.client.list_catalogs(tile=tile):
+        for catalog in client.list_catalogs(tile=tile):
             print(f"    - {catalog}")
 
     def has_catalog(self, tile, catalog):
@@ -479,7 +492,8 @@ class CLI:
             The name of the catalog.
 
         """
-        has = "" if self.client.has_catalog(tile, catalog) else "NO "
+        client = Carpyncho()
+        has = "" if client.has_catalog(tile, catalog) else "NO "
         print(f"Catalog '{catalog}' or tile '{tile}': {has}exists")
 
     def catalog_info(self, tile, catalog):
@@ -497,12 +511,16 @@ class CLI:
             "records": humanize.intcomma
         }
 
+        client = Carpyncho()
         print(f"Catalog {tile}-{catalog}")
-        for k, v in self.client.catalog_info(tile, catalog).items():
+        for k, v in client.catalog_info(tile, catalog).items():
             fmt = FORMATTERS.get(k, str)
             print(f"    - {k}: {fmt(v)}")
 
-    def download_catalog(self, tile, catalog, *, force=False, out):
+    def download_catalog(
+        self, tile, catalog,
+        *, force=False, parquet_engine=DEFAULT_PARQUET_ENGINE, out
+    ):
         """Retrives a catalog from th Carpyncho dataset collection.
 
         tile:
@@ -520,6 +538,9 @@ class CLI:
             Force to ignore the cached value and redownload the catalog.
             Try to always set force to False.
 
+        parquet_engine:
+            Parquet engine to decode.
+
         """
         PARSERS = {
             ".xlsx": pd.DataFrame.to_excel,
@@ -527,7 +548,9 @@ class CLI:
             ".pkl": pd.DataFrame.to_pickle,
             ".parquet": pd.DataFrame.to_parquet}
 
-        df = self.client.get_catalog(tile, catalog)
+        client = Carpyncho(parquet_engine=parquet_engine)
+
+        df = client.get_catalog(tile, catalog, force=force)
 
         ext = os.path.splitext(out)[-1].lower()
         if ext not in PARSERS:
@@ -540,7 +563,7 @@ class CLI:
 
 def main():
     """Run the carpyncho CLI interface."""
-    cli = CLI(client=Carpyncho())
+    cli = CLI()
     commands = tuple(cli.get_commands().values())
     clize.run(
         *commands,

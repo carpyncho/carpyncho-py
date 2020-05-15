@@ -39,7 +39,7 @@ REQUIREMENTS = [
     "diskcache", "tqdm", "clize", "humanize",
 
     # formats
-    "pyarrow", "openpyxl"]
+    "fastparquet", "pyarrow", "openpyxl"]
 
 with open(PATH / "README.md") as fp:
     LONG_DESCRIPTION = fp.read()
