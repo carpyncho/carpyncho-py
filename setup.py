@@ -83,7 +83,8 @@ def do_setup():
         entry_points={
             'console_scripts': ['carpyncho=carpyncho:main']},
         py_modules=["carpyncho", "ez_setup"],
-        install_requires=REQUIREMENTS)
+        install_requires=REQUIREMENTS,
+        include_package_data=True)
 
 
 if __name__ == "__main__":
