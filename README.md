@@ -8,7 +8,7 @@
 [![BSD-3](https://img.shields.io/badge/License-BSD3-blue.svg)](https://www.tldrlegal.com/l/bsd3)
 [![Documentation Status](https://readthedocs.org/projects/carpyncho-py/badge/?version=latest)](https://carpyncho-py.readthedocs.io/en/latest/?badge=latest)
 [![PyPI](https://img.shields.io/pypi/v/carpyncho)](https://pypi.org/project/carpyncho/)
-<a href="http://ascl.net/2005.007"><img src="https://img.shields.io/badge/ascl-2005.007-blue.svg?colorB=262255" alt="ascl:2005.007" /></a>
+[![ascl:2005.007](https://img.shields.io/badge/ascl-2005.007-blue.svg?colorB=262255)](http://ascl.net/2005.007)
 
 [![Logo](https://github.com/carpyncho/carpyncho.github.io/raw/master/static/logo.png)](https://carpyncho.github.io/)
 
