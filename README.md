@@ -8,8 +8,10 @@
 [![BSD-3](https://img.shields.io/badge/License-BSD3-blue.svg)](https://www.tldrlegal.com/l/bsd3)
 [![Documentation Status](https://readthedocs.org/projects/carpyncho-py/badge/?version=latest)](https://carpyncho-py.readthedocs.io/en/latest/?badge=latest)
 [![PyPI](https://img.shields.io/pypi/v/carpyncho)](https://pypi.org/project/carpyncho/)
+<a href="http://ascl.net/2005.007"><img src="https://img.shields.io/badge/ascl-2005.007-blue.svg?colorB=262255" alt="ascl:2005.007" /></a>
 
 [![Logo](https://github.com/carpyncho/carpyncho.github.io/raw/master/static/logo.png)](https://carpyncho.github.io/)
+
 
 This library access as a [Pandas DataFrame](https://pandas.pydata.org/) all the data of the web version of
 Carpyncho [https://carpyncho.github.io/](https://carpyncho.github.io/).
@@ -39,17 +41,21 @@ citations to the following paper:
 Bibtex entry
 
 ```bib
-@Article{cabral:2020,
-  author      = {Juan B. Cabral AND Felipe Ramos AND Sebastián Gurovich AND Pablo Granitto},
-  title       = {
-    Automatic Catalog of RRLyrae from $\sim$ 14 million VVV
-    Light Curves: How far can we go with traditional machine-learning?},
-  version     = {1},
-  date        = {2020-05-01},
-  eprinttype  = {arxiv},
-  eprintclass = {astro-ph.IM, astro-ph.SR, cs.LG, stat.ML},
-  eprint      = {http://arxiv.org/abs/2005.00220v1},
-  url         = {http://arxiv.org/abs/2005.00220v1}
+@ARTICLE{2020arXiv200500220C,
+       author = {{Cabral}, Juan B. and {Ramos}, Felipe and {Gurovich}, Sebasti{\'a}n and
+         {Granitto}, Pablo},
+        title = "{Automatic Catalog of RRLyrae from $\sim$ 14 million VVV Light Curves: How far can we go with traditional machine-learning?}",
+      journal = {arXiv e-prints},
+     keywords = {Astrophysics - Instrumentation and Methods for Astrophysics, Astrophysics - Solar and Stellar Astrophysics, Computer Science - Machine Learning, Statistics - Machine Learning},
+         year = 2020,
+        month = may,
+          eid = {arXiv:2005.00220},
+        pages = {arXiv:2005.00220},
+archivePrefix = {arXiv},
+       eprint = {2005.00220},
+ primaryClass = {astro-ph.IM},
+       adsurl = {https://ui.adsabs.harvard.edu/abs/2020arXiv200500220C},
+      adsnote = {Provided by the SAO/NASA Astrophysics Data System}
 }
 ```
 
