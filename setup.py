@@ -23,6 +23,7 @@ import os
 import pathlib
 
 from ez_setup import use_setuptools
+
 use_setuptools()
 
 from setuptools import setup
@@ -35,11 +36,19 @@ from setuptools import setup
 PATH = pathlib.Path(os.path.abspath(os.path.dirname(__file__)))
 
 REQUIREMENTS = [
-    "numpy", "requests", "attrs", "pandas",
-    "diskcache", "tqdm", "clize", "humanize",
-
+    "numpy",
+    "requests",
+    "attrs",
+    "pandas",
+    "diskcache",
+    "tqdm",
+    "typer",
+    "humanize",
     # formats
-    "fastparquet", "pyarrow", "openpyxl"]
+    "fastparquet",
+    "pyarrow",
+    "openpyxl",
+]
 
 with open(PATH / "README.md") as fp:
     LONG_DESCRIPTION = fp.read()
@@ -47,14 +56,18 @@ with open(PATH / "README.md") as fp:
 DESCRIPTION = "Python client for Carpyncho VVV dataset collection."
 
 with open(PATH / "carpyncho.py") as fp:
-    VERSION = [
-        line for line in fp.readlines() if line.startswith("__version__")
-    ][0].split("=", 1)[-1].strip().replace('"', "")
+    VERSION = (
+        [line for line in fp.readlines() if line.startswith("__version__")][0]
+        .split("=", 1)[-1]
+        .strip()
+        .replace('"', "")
+    )
 
 
 # =============================================================================
 # FUNCTIONS
 # =============================================================================
+
 
 def do_setup():
     setup(
@@ -62,13 +75,12 @@ def do_setup():
         version=VERSION,
         description=DESCRIPTION,
         long_description=LONG_DESCRIPTION,
-        long_description_content_type='text/markdown',
+        long_description_content_type="text/markdown",
         author="J.B. Cabral",
         author_email="jbc.develop@gmail.com",
         url="https://carpyncho-py.readthedocs.io/",
         license="3 Clause BSD",
-        keywords=[
-            "astronomy", "vvv", "catalogs"],
+        keywords=["astronomy", "vvv", "catalogs"],
         classifiers=(
             "Development Status :: 4 - Beta",
             "Intended Audience :: Education",
@@ -79,12 +91,13 @@ def do_setup():
             "Programming Language :: Python :: 3.7",
             "Programming Language :: Python :: 3.8",
             "Programming Language :: Python :: Implementation :: CPython",
-            "Topic :: Scientific/Engineering"),
-        entry_points={
-            'console_scripts': ['carpyncho=carpyncho:main']},
+            "Topic :: Scientific/Engineering",
+        ),
+        entry_points={"console_scripts": ["carpyncho=carpyncho:main"]},
         py_modules=["carpyncho", "ez_setup"],
         install_requires=REQUIREMENTS,
-        include_package_data=True)
+        include_package_data=True,
+    )
 
 
 if __name__ == "__main__":

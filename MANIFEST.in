@@ -2,3 +2,12 @@ include MANIFEST.in
 include CODE_OF_CONDUCT.md
 include LICENSE
 include README.md
+
+
+exclude .travis.yml
+exclude .readthedocs.yml
+exclude tox.ini
+exclude tests.py
+recursive-exclude docs *
+recursive-exclude data *
+
