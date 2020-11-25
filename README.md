@@ -3,7 +3,7 @@
 > Python client for Carpyncho VVV dataset collection.
 
 [![QuatroPe](https://img.shields.io/badge/QuatroPe-Applications-1c5896)](https://quatrope.github.io/)
-[![Build Status](https://travis-ci.org/carpyncho/carpyncho-py.svg?branch=master)](https://travis-ci.org/carpyncho/carpyncho-py)
+[![Build Status](https://travis-ci.com/carpyncho/carpyncho-py.svg?branch=master)](https://travis-ci.com/carpyncho/carpyncho-py)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3779502.svg)](https://doi.org/10.5281/zenodo.3779502)
 [![Python 3](https://img.shields.io/badge/python-3.7+-blue.svg)](https://badge.fury.io/py/carpyncho)
 [![BSD-3](https://img.shields.io/badge/License-BSD3-blue.svg)](https://www.tldrlegal.com/l/bsd3)
@@ -42,20 +42,21 @@ citations to the following paper:
 Bibtex entry
 
 ```bib
-@ARTICLE{2020arXiv200500220C,
-       author = {{Cabral}, Juan B. and {Ramos}, Felipe and {Gurovich}, Sebasti{\'a}n and
-         {Granitto}, Pablo},
-        title = "{Automatic Catalog of RRLyrae from $\sim$ 14 million VVV Light Curves: How far can we go with traditional machine-learning?}",
-      journal = {arXiv e-prints},
-     keywords = {Astrophysics - Instrumentation and Methods for Astrophysics, Astrophysics - Solar and Stellar Astrophysics, Computer Science - Machine Learning, Statistics - Machine Learning},
+@ARTICLE{2020A&A...642A..58C,
+       author = {{Cabral}, J.~B. and {Ramos}, F. and {Gurovich}, S. and {Granitto}, P.~M.},
+        title = "{Automatic catalog of RR Lyrae from {\ensuremath{\sim}}14 million VVV light curves: How far can we go with traditional machine-learning?}",
+      journal = {\aap},
+     keywords = {methods: data analysis, methods: statistical, surveys, catalogs, stars: variables: RR Lyrae, Galaxy: bulge, Astrophysics - Instrumentation and Methods for Astrophysics, Astrophysics - Solar and Stellar Astrophysics, Computer Science - Machine Learning, Statistics - Machine Learning},
          year = 2020,
-        month = may,
-          eid = {arXiv:2005.00220},
-        pages = {arXiv:2005.00220},
+        month = oct,
+       volume = {642},
+          eid = {A58},
+        pages = {A58},
+          doi = {10.1051/0004-6361/202038314},
 archivePrefix = {arXiv},
        eprint = {2005.00220},
  primaryClass = {astro-ph.IM},
-       adsurl = {https://ui.adsabs.harvard.edu/abs/2020arXiv200500220C},
+       adsurl = {https://ui.adsabs.harvard.edu/abs/2020A&A...642A..58C},
       adsnote = {Provided by the SAO/NASA Astrophysics Data System}
 }
 ```
