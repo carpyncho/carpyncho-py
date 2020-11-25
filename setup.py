@@ -44,7 +44,6 @@ REQUIREMENTS = [
     "tqdm",
     "typer",
     "humanize",
-
     # formats
     "fastparquet",
     "pyarrow",

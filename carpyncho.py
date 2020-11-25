@@ -21,38 +21,37 @@ Carpyncho https://carpyncho.github.io/.
 __all__ = ["Carpyncho", "CARPYNCHOPY_DATA_PATH"]
 
 
-__version__ = "0.1"
+__version__ = "0.2"
 
 
 # =============================================================================
 # IMPORTS
 # =============================================================================
 
-import os
-import io
 import bz2
+import functools
+import hashlib
+import inspect
+import io
+import json
+import os
 import pathlib
 import typing as t
-import inspect
-import hashlib
-import functools
 import urllib
-import json
 
 import attr
 
 import diskcache as dcache
 
-import tqdm
-
 import humanize
-
-import requests
-
-import typer
 
 import pandas as pd
 
+import requests
+
+import tqdm
+
+import typer
 
 # =============================================================================
 # CONSTANTS
@@ -512,7 +511,7 @@ class CLI:
             ..., help="The name of the tile to retrieve the catalogs"
         ),
     ):
-        """Show the available catalogs for a given tile. """
+        """Show the available catalogs for a given tile."""
         client = Carpyncho()
 
         msg = typer.style(f"Tile '{tile}'", fg=typer.colors.GREEN)

@@ -21,22 +21,22 @@ Warning this code is SLOW!
 # IMPORTS
 # =============================================================================
 
+import atexit
 import os
 import pathlib
-import atexit
 import shutil
 import tempfile
 import uuid
 
-import pytest
-
-import numpy as np
+import carpyncho
 
 import humanize
 
+import numpy as np
+
 import pandas as pd
 
-import carpyncho
+import pytest
 
 
 # =============================================================================
@@ -56,6 +56,7 @@ atexit.register(shutil.rmtree, TEST_CACHE_PATH)
 # FIXTURES
 # =============================================================================
 
+
 @pytest.fixture
 def client_maker(mocker):
     def maker(**kwargs):
@@ -65,6 +66,7 @@ def client_maker(mocker):
         client = carpyncho.Carpyncho(**kwargs)
         client.cache.clear()
         return client
+
     return maker
 
 
@@ -81,6 +83,7 @@ def remote_client(client_maker):
 # =============================================================================
 # CLIENT TEST
 # =============================================================================
+
 
 def test_index(client):
     index = client.retrieve_index(reset=True)
@@ -134,33 +137,33 @@ def test_get_catalog(client):
 # CLI TEST
 # =============================================================================
 
+
 def test_CLI_list_tiles(client, script_runner):
-    expected = "\n".join(
-        f"- {t}" for t in client.list_tiles())
-    ret = script_runner.run('carpyncho', "list-tiles")
-    assert ret.stdout.strip() == expected
-    assert ret.stderr == ''
+    expected = "\n".join(f"  - {t}" for t in client.list_tiles())
+    ret = script_runner.run("carpyncho", "list-tiles")
+    assert ret.stdout.strip() == expected.strip()
+    assert ret.stderr == ""
 
 
 def test_CLI_list_catalogs(client, script_runner):
-    expected = (
-        "Tile _test\n" + "\n".join(
-            f"    - {c}" for c in client.list_catalogs("_test")))
-    ret = script_runner.run('carpyncho', "list-catalogs", "_test")
-    assert ret.stdout.strip() == expected
-    assert ret.stderr == ''
+    expected = "Tile '_test'\n" + "\n".join(
+        f"  - {c}" for c in client.list_catalogs("_test")
+    )
+    ret = script_runner.run("carpyncho", "list-catalogs", "_test")
+    assert ret.stdout.strip() == expected.strip()
+    assert ret.stderr == ""
 
 
 def test_CLI_has_catalog(client, script_runner):
     ret = script_runner.run(
-        'carpyncho', "has-catalog", "_test", "parquet_bz2_small")
+        "carpyncho", "has-catalog", "_test", "parquet_bz2_small"
+    )
     assert ret.stdout.strip().endswith(": exists")
-    assert ret.stderr == ''
+    assert ret.stderr == ""
 
-    ret = script_runner.run(
-        'carpyncho', "has-catalog", "_test", "nope")
+    ret = script_runner.run("carpyncho", "has-catalog", "_test", "nope")
     assert ret.stdout.strip().endswith(": NO exists")
-    assert ret.stderr == ''
+    assert ret.stderr == ""
 
 
 def test_CLI_catalog_info(client, script_runner):
@@ -170,38 +173,46 @@ def test_CLI_catalog_info(client, script_runner):
     size = humanize.naturalsize(info["size"], binary=True)
     records = humanize.intcomma(info["records"])
 
-    expected = "\n".join([
-        f"Catalog {tile}-{catalog}",
-        f"    - hname: {info['hname']}",
-        f"    - format: {info['format']}",
-        f"    - extension: {info['extension']}",
-        f"    - date: {info['date']}",
-        f"    - md5sum: {info['md5sum']}",
-        f"    - filename: {info['filename']}",
-        f"    - driveid: {info['driveid']}",
-        f"    - size: {size}",
-        f"    - records: {records}"])
+    expected = "\n".join(
+        [
+            f"Catalog {tile}-{catalog}",
+            f"  - hname: {info['hname']}",
+            f"  - format: {info['format']}",
+            f"  - extension: {info['extension']}",
+            f"  - date: {info['date']}",
+            f"  - md5sum: {info['md5sum']}",
+            f"  - filename: {info['filename']}",
+            f"  - driveid: {info['driveid']}",
+            f"  - size: {size}",
+            f"  - records: {records}",
+        ]
+    )
 
-    ret = script_runner.run(
-        'carpyncho', "catalog-info", tile, catalog)
+    ret = script_runner.run("carpyncho", "catalog-info", tile, catalog)
 
-    assert ret.stdout.strip() == expected
-    assert ret.stderr == ''
+    assert ret.stdout.strip() == expected.strip()
+    assert ret.stderr == ""
 
 
 def test_CLI_download_catalog(client, script_runner):
     outpath = os.path.join(TEST_CACHE_PATH, "test.csv")
 
     ret = script_runner.run(
-        'carpyncho', "download-catalog",
-        "_test", "parquet_bz2_small", "--out", outpath)
-    assert ret.stdout.strip() == f'Writing {outpath}...'
+        "carpyncho",
+        "download-catalog",
+        "_test",
+        "parquet_bz2_small",
+        "--out",
+        outpath,
+    )
+    assert ret.stdout.strip() == f"Writing {outpath}..."
     assert "_test-parquet_bz2_small: " in ret.stderr
 
 
 # =============================================================================
 # INDEX JSON TEST
 # =============================================================================
+
 
 def test_parse_local_index(client):
     schema = {
@@ -213,7 +224,7 @@ def test_parse_local_index(client):
         "filename": str,
         "driveid": str,
         "size": int,
-        "records": int
+        "records": int,
     }
     index = client.retrieve_index(reset=True)
     for tile, tdata in index.items():
@@ -234,7 +245,7 @@ def test_parse_remote_index(remote_client):
         "filename": str,
         "driveid": str,
         "size": int,
-        "records": int
+        "records": int,
     }
     index = remote_client.retrieve_index(reset=True)
     for tile, tdata in index.items():
@@ -249,16 +260,18 @@ def test_parse_remote_index(remote_client):
 # TEST ENGINES
 # =============================================================================
 
+
 def test_parquet_engines(client_maker):
     clients = [
         client_maker(index_url=LOCAL_INDEX),
         client_maker(index_url=LOCAL_INDEX, parquet_engine="auto"),
         client_maker(index_url=LOCAL_INDEX, parquet_engine="pyarrow"),
-        client_maker(index_url=LOCAL_INDEX, parquet_engine="fastparquet")]
+        client_maker(index_url=LOCAL_INDEX, parquet_engine="fastparquet"),
+    ]
 
     results = [
-        client.get_catalog("_test", "parquet_bz2_small")
-        for client in clients]
+        client.get_catalog("_test", "parquet_bz2_small") for client in clients
+    ]
 
     checks = [np.all(results[0] == rst) for rst in results[1:]]
     assert np.all(checks)
@@ -270,9 +283,16 @@ def test_CLI_parquet_engines(client, script_runner):
     for engine in ["auto", "pyarrow", "fastparquet"]:
         outpath = os.path.join(TEST_CACHE_PATH, f"test_{engine}.csv")
         script_runner.run(
-            'carpyncho', "download-catalog",
-            "_test", "parquet_bz2_small",
-            "--out", outpath, "--parquet-engine", engine, "--force")
+            "carpyncho",
+            "download-catalog",
+            "_test",
+            "parquet_bz2_small",
+            "--out",
+            outpath,
+            "--parquet-engine",
+            engine,
+            "--force",
+        )
         results.append(pd.read_csv(outpath))
 
     checks = [np.all(results[0] == rst) for rst in results[1:]]
