@@ -21,7 +21,7 @@ Carpyncho https://carpyncho.github.io/.
 __all__ = ["Carpyncho", "CARPYNCHOPY_DATA_PATH"]
 
 
-__version__ = "0.0.6"
+__version__ = "0.1"
 
 
 # =============================================================================
@@ -49,7 +49,7 @@ import humanize
 
 import requests
 
-import clize
+import typer
 
 import pandas as pd
 
@@ -69,7 +69,8 @@ DRIVE_URL = "https://docs.google.com/uc?export=download"
 
 #: Where carpyncho gonna store the entire data.
 CARPYNCHOPY_DATA_PATH = pathlib.Path(
-    os.path.expanduser(os.path.join('~', 'carpyncho_py_data')))
+    os.path.expanduser(os.path.join("~", "carpyncho_py_data"))
+)
 
 
 #: Chunk size when the library are download the big files of Carpyncho.
@@ -89,9 +90,9 @@ DEFAULT_PARQUET_ENGINE = "auto"
 # CACHE ORCHESTRATION
 # =============================================================================
 
+
 def from_cache(
-    cache, tag, function, cache_expire,
-    force=False, *args, **kwargs
+    cache, tag, function, cache_expire, force=False, *args, **kwargs
 ):
     """Simplify cache orchestration.
 
@@ -121,20 +122,27 @@ def from_cache(
     """
     # start the cache orchestration
     key = dcache.core.args_to_key(
-        base=("carpyncho", tag), args=args, kwargs=kwargs, typed=False)
+        base=("carpyncho", tag), args=args, kwargs=kwargs, typed=False
+    )
 
     with cache as c:
         c.expire()
 
         value = (
-            dcache.core.ENOVAL if force else
-            c.get(key, default=dcache.core.ENOVAL, retry=True))
+            dcache.core.ENOVAL
+            if force
+            else c.get(key, default=dcache.core.ENOVAL, retry=True)
+        )
 
         if value is dcache.core.ENOVAL:
             value = function(**kwargs)
             c.set(
-                key, value, expire=cache_expire,
-                tag=f"carpyncho.{tag}", retry=True)
+                key,
+                value,
+                expire=cache_expire,
+                tag=f"carpyncho.{tag}",
+                retry=True,
+            )
 
     return value
 
@@ -142,6 +150,7 @@ def from_cache(
 # =============================================================================
 # CLIENT
 # =============================================================================
+
 
 @attr.s(hash=False, frozen=True)
 class Carpyncho:
@@ -194,7 +203,8 @@ class Carpyncho:
     @cache.default
     def _cache_default(self):
         return dcache.Cache(
-            directory=DEFAULT_CACHE_DIR, size_limit=DEFAULT_CACHE_SIZE_LIMIT)
+            directory=DEFAULT_CACHE_DIR, size_limit=DEFAULT_CACHE_SIZE_LIMIT
+        )
 
     # =========================================================================
     # UTILITIES FOR CHECK THE REMOTE DATA
@@ -216,11 +226,13 @@ class Carpyncho:
         dict with the index structure.
 
         """
+
         def get_json_data(url):
             parsed = urllib.parse.urlparse(url)
             if parsed.scheme in ("http", "https", "ftp"):
                 response = requests.get(
-                    url, headers={'Cache-Control': 'no-cache'})
+                    url, headers={"Cache-Control": "no-cache"}
+                )
                 return response.json()
             with open(url) as fp:
                 return json.load(fp)
@@ -231,7 +243,8 @@ class Carpyncho:
             function=get_json_data,
             cache_expire=3600,
             force=reset,
-            url=self.index_url)
+            url=self.index_url,
+        )
 
     @property
     def index_(self):
@@ -316,8 +329,7 @@ class Carpyncho:
 
         tile = index[tile]
         if catalog not in tile:
-            raise ValueError(
-                f"Catalog {catalog} for tile {tile} not found")
+            raise ValueError(f"Catalog {catalog} for tile {tile} not found")
 
         return tile[catalog]
 
@@ -331,32 +343,42 @@ class Carpyncho:
         # https://stackoverflow.com/a/27508615
 
         # prepare the parameters and download the token
-        params = {'id': driveid}
+        params = {"id": driveid}
         session = requests.Session()
         response = session.get(
-            DRIVE_URL, params=params, stream=True,
-            headers={'Cache-Control': 'no-cache'})
+            DRIVE_URL,
+            params=params,
+            stream=True,
+            headers={"Cache-Control": "no-cache"},
+        )
 
         # retrieve the token from gdrive page
         token = None
         for key, value in response.cookies.items():
-            if key.startswith('download_warning'):
+            if key.startswith("download_warning"):
                 token = value
                 break
 
         # if we have token add to the parameters
         if token:
-            params['confirm'] = token
+            params["confirm"] = token
 
         # make the real deal request
         response = session.get(
-            DRIVE_URL, params=params, stream=True,
-            headers={'Cache-Control': 'no-cache'})
+            DRIVE_URL,
+            params=params,
+            stream=True,
+            headers={"Cache-Control": "no-cache"},
+        )
 
         # progress bar
         pbar = tqdm.tqdm(
-            total=size, initial=0, unit='B',
-            unit_scale=True, desc=f"{tile}-{catalog}")
+            total=size,
+            initial=0,
+            unit="B",
+            unit_scale=True,
+            desc=f"{tile}-{catalog}",
+        )
 
         # the file is a bz2 file, we are going to decompress and store
         # the raw parquet data into a BytesIO
@@ -382,7 +404,8 @@ class Carpyncho:
             raise IOError(
                 f"'{tile}-{catalog}' incorrect download.\n"
                 f"expected: {md5sum}\n"
-                f"caclulated: {file_hash.hexdigest()}")
+                f"caclulated: {file_hash.hexdigest()}"
+            )
 
         # read the entire stream into a dataframe
         parquet_stream.seek(0)
@@ -425,10 +448,13 @@ class Carpyncho:
             function=self._grive_download,
             cache_expire=self.cache_expire,
             force=force,
-
             # params to _gdrive_download
-            tile=tile, catalog=catalog,
-            driveid=driveid, size=size, md5sum=md5sum)
+            tile=tile,
+            catalog=catalog,
+            driveid=driveid,
+            size=size,
+            md5sum=md5sum,
+        )
 
         return df
 
@@ -437,6 +463,8 @@ class Carpyncho:
 # CLI
 # =============================================================================
 
+
+@attr.s(frozen=True)
 class CLI:
     """Carpyncho console client.
 
@@ -445,81 +473,115 @@ class CLI:
 
     """
 
-    footnotes = "\n".join([
-        "This software is under the BSD 3-Clause License.",
-        "Copyright (c) 2020, Juan Cabral.",
-        "For bug reporting or other instructions please check:"
-        " https://github.com/carpyncho/carpyncho-py"])
+    footnotes = "\n".join(
+        [
+            "This software is under the BSD 3-Clause License.",
+            "Copyright (c) 2020, Juan Cabral.",
+            "For bug reporting or other instructions please check:"
+            " https://github.com/carpyncho/carpyncho-py",
+        ]
+    )
 
-    def get_commands(self):
-        methods = {}
+    run = attr.ib(init=False)
+
+    @run.default
+    def _set_run_default(self):
+        app = typer.Typer()
         for k in dir(self):
             if k.startswith("_"):
                 continue
             v = getattr(self, k)
-            if inspect.ismethod(v) and k != "get_commands":
-                methods[k] = v
-        return methods
+            if inspect.ismethod(v) and not k.startswith("_"):
+                decorator = app.command()
+                decorator(v)
+        return app
 
     def version(self):
         """Print Carpyncho version."""
-        print(VERSION)
+        typer.echo(VERSION)
 
     def list_tiles(self):
         """Show available tiles."""
         client = Carpyncho()
         for tile in client.list_tiles():
-            print(f"- {tile}")
+            typer.echo(f"  - {tile}")
 
-    def list_catalogs(self, tile):
-        """Show the available catalogs for a given tile.
-
-        tile:
-            The name of the tile to retrieve the catalogs.
-
-        """
+    def list_catalogs(
+        self,
+        tile: str = typer.Argument(
+            ..., help="The name of the tile to retrieve the catalogs"
+        ),
+    ):
+        """Show the available catalogs for a given tile. """
         client = Carpyncho()
-        print(f"Tile {tile}")
+
+        msg = typer.style(f"Tile '{tile}'", fg=typer.colors.GREEN)
+        typer.echo(msg)
+
         for catalog in client.list_catalogs(tile=tile):
-            print(f"    - {catalog}")
+            typer.echo(f"  - {catalog}")
 
-    def has_catalog(self, tile, catalog):
-        """Check if a given catalog and tile exists.
-
-        tile:
-
-        catalog:
-            The name of the catalog.
-
-        """
+    def has_catalog(
+        self,
+        tile: str = typer.Argument(..., help="The name of the tile"),
+        catalog: str = typer.Argument(..., help="Tha name of the catalog"),
+    ):
+        """Check if a given catalog and tile exists."""
         client = Carpyncho()
-        has = "" if client.has_catalog(tile, catalog) else "NO "
-        print(f"Catalog '{catalog}' or tile '{tile}': {has}exists")
 
-    def catalog_info(self, tile, catalog):
-        """Retrieve the information about a given catalog.
+        if client.has_catalog(tile, catalog):
+            has, fg = "exists", typer.colors.GREEN
+        else:
+            has, fg = "NO exists", typer.colors.RED
 
-        tile:
-            The name of the tile.
+        msg = typer.style(
+            f"Catalog '{catalog}' or tile '{tile}': {has}", fg=fg
+        )
+        typer.echo(msg)
 
-        catalog:
-            The name of the catalog.
-
-        """
+    def catalog_info(
+        self,
+        tile: str = typer.Argument(..., help="The name of the tile"),
+        catalog: str = typer.Argument(..., help="Tha name of the catalog"),
+    ):
+        """Retrieve the information about a given catalog."""
         FORMATTERS = {
             "size": functools.partial(humanize.naturalsize, binary=True),
-            "records": humanize.intcomma
+            "records": humanize.intcomma,
         }
 
         client = Carpyncho()
-        print(f"Catalog {tile}-{catalog}")
+        msg = typer.style(
+            f"Catalog {tile}-{catalog}", fg=typer.colors.GREEN, bold=True
+        )
+        typer.echo(msg)
         for k, v in client.catalog_info(tile, catalog).items():
             fmt = FORMATTERS.get(k, str)
-            print(f"    - {k}: {fmt(v)}")
+            typer.echo(f"  - {k}: {fmt(v)}")
 
     def download_catalog(
-        self, tile, catalog,
-        *, force=False, parquet_engine=DEFAULT_PARQUET_ENGINE, out
+        self,
+        tile: str = typer.Argument(..., help="The name of the tile"),
+        catalog: str = typer.Argument(..., help="Tha name of the catalog"),
+        force: bool = typer.Option(
+            default=False,
+            help=(
+                "Force to ignore the cached value and redownload the catalog. "
+                "Try to always set force to False."
+            ),
+        ),
+        parquet_engine: str = typer.Option(
+            default=DEFAULT_PARQUET_ENGINE,
+            help="Parquet engine to decode de file",
+        ),
+        out: str = typer.Option(
+            ...,
+            help=(
+                "Path to store the catalog. The extension of the file "
+                "determines the format. Options are '.xlsx' (Excel), '.csv', "
+                "'.pkl' (Python pickle) and '.parquet'"
+            ),
+        ),
     ):
         """Retrives a catalog from th Carpyncho dataset collection.
 
@@ -530,23 +592,21 @@ class CLI:
             The name of the catalog.
 
         out:
-            Path to store the catalog. The extension of the file detemines
-            the format. Options are ".xlsx" (Excel), ".csv",
-            ".pkl" (Python pickle) and ".parquet".
+
 
         force:
-            Force to ignore the cached value and redownload the catalog.
-            Try to always set force to False.
+
 
         parquet_engine:
-            Parquet engine to decode.
+
 
         """
         PARSERS = {
             ".xlsx": pd.DataFrame.to_excel,
             ".csv": pd.DataFrame.to_csv,
             ".pkl": pd.DataFrame.to_pickle,
-            ".parquet": pd.DataFrame.to_parquet}
+            ".parquet": pd.DataFrame.to_parquet,
+        }
 
         client = Carpyncho(parquet_engine=parquet_engine)
 
@@ -554,9 +614,10 @@ class CLI:
 
         ext = os.path.splitext(out)[-1].lower()
         if ext not in PARSERS:
-            raise clize.UserError(f"format '{ext}' not recognized")
+            typer.echo(f"format '{ext}' not recognized", err=True)
+            raise typer.Exit()
 
-        print(f"Writing {out}...")
+        typer.echo(f"Writing {out}...")
         parser = PARSERS[ext]
         parser(df, out)
 
@@ -564,11 +625,7 @@ class CLI:
 def main():
     """Run the carpyncho CLI interface."""
     cli = CLI()
-    commands = tuple(cli.get_commands().values())
-    clize.run(
-        *commands,
-        description=cli.__doc__,
-        footnotes=cli.footnotes)
+    cli.run()
 
 
 if __name__ == "__main__":
