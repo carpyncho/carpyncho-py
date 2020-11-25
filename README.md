@@ -2,6 +2,7 @@
 
 > Python client for Carpyncho VVV dataset collection.
 
+[![QuatroPe](https://img.shields.io/badge/QuatroPe-Applications-1c5896)](https://quatrope.github.io/)
 [![Build Status](https://travis-ci.org/carpyncho/carpyncho-py.svg?branch=master)](https://travis-ci.org/carpyncho/carpyncho-py)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3779502.svg)](https://doi.org/10.5281/zenodo.3779502)
 [![Python 3](https://img.shields.io/badge/python-3.7+-blue.svg)](https://badge.fury.io/py/carpyncho)
