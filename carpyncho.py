@@ -121,7 +121,11 @@ def from_cache(
     """
     # start the cache orchestration
     key = dcache.core.args_to_key(
-        base=("carpyncho", tag), args=args, kwargs=kwargs, typed=False
+        base=("carpyncho", tag),
+        args=args,
+        kwargs=kwargs,
+        typed=False,
+        ignore=[],
     )
 
     with cache as c:
@@ -391,6 +395,7 @@ class Carpyncho:
         for chunk in response.iter_content(CHUNK_SIZE):
             if not chunk:
                 break
+
             parquet_stream.write(decompressor.decompress(chunk))
             file_hash.update(chunk)
             pbar.update(CHUNK_SIZE)
