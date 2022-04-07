@@ -21,7 +21,7 @@ Carpyncho https://carpyncho.github.io/.
 __all__ = ["Carpyncho", "CARPYNCHOPY_DATA_PATH"]
 
 
-__version__ = "0.2"
+__version__ = "0.3"
 
 
 # =============================================================================
@@ -342,32 +342,12 @@ class Carpyncho:
 
     def _grive_download(self, tile, catalog, driveid, size, md5sum):
 
-        # https://stackoverflow.com/a/39225272
-        # https://stackoverflow.com/a/27508615
-
         # prepare the parameters and download the token
-        params = {"id": driveid}
+        params = {"id": driveid, "confirm": "t"}
         session = requests.Session()
-        response = session.get(
-            DRIVE_URL,
-            params=params,
-            stream=True,
-            headers={"Cache-Control": "no-cache"},
-        )
-
-        # retrieve the token from gdrive page
-        token = None
-        for key, value in response.cookies.items():
-            if key.startswith("download_warning"):
-                token = value
-                break
-
-        # if we have token add to the parameters
-        if token:
-            params["confirm"] = token
 
         # make the real deal request
-        response = session.get(
+        response = session.post(
             DRIVE_URL,
             params=params,
             stream=True,
@@ -393,10 +373,13 @@ class Carpyncho:
 
         # retrive all the data one chunk at the time
         for chunk in response.iter_content(CHUNK_SIZE):
+
             if not chunk:
                 break
 
-            parquet_stream.write(decompressor.decompress(chunk))
+            decompressed = decompressor.decompress(chunk)
+            parquet_stream.write(decompressed)
+
             file_hash.update(chunk)
             pbar.update(CHUNK_SIZE)
 
