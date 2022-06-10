@@ -21,7 +21,7 @@ Carpyncho https://carpyncho.github.io/.
 __all__ = ["Carpyncho", "CARPYNCHOPY_DATA_PATH"]
 
 
-__version__ = "0.2"
+__version__ = "0.3"
 
 
 # =============================================================================
@@ -61,9 +61,6 @@ VERSION = __version__
 
 #: Location of the entire dataset index.
 CARPYNCHO_INDEX_URL = "https://raw.githubusercontent.com/carpyncho/carpyncho-py/master/data/index.json"  # noqa
-
-#: Google drive location.
-DRIVE_URL = "https://docs.google.com/uc?export=download"
 
 
 #: Where carpyncho gonna store the entire data.
@@ -121,7 +118,11 @@ def from_cache(
     """
     # start the cache orchestration
     key = dcache.core.args_to_key(
-        base=("carpyncho", tag), args=args, kwargs=kwargs, typed=False
+        base=("carpyncho", tag),
+        args=args,
+        kwargs=kwargs,
+        typed=False,
+        ignore=[],
     )
 
     with cache as c:
@@ -312,7 +313,7 @@ class Carpyncho:
         -------
         dict:
             The entire information of the given catalog file. This include
-            drive-id, md5 checksum, size in bytes, number of total records,
+            url, md5 checksum, size in bytes, number of total records,
             etc.
 
         Raises
@@ -336,38 +337,15 @@ class Carpyncho:
     # THE DOWNLOAD PART
     # =========================================================================
 
-    def _grive_download(self, tile, catalog, driveid, size, md5sum):
-
-        # https://stackoverflow.com/a/39225272
-        # https://stackoverflow.com/a/27508615
+    def _http_download(self, tile, catalog, url, size, md5sum):
 
         # prepare the parameters and download the token
-        params = {"id": driveid}
         session = requests.Session()
-        response = session.get(
-            DRIVE_URL,
-            params=params,
-            stream=True,
-            headers={"Cache-Control": "no-cache"},
-        )
-
-        # retrieve the token from gdrive page
-        token = None
-        for key, value in response.cookies.items():
-            if key.startswith("download_warning"):
-                token = value
-                break
-
-        # if we have token add to the parameters
-        if token:
-            params["confirm"] = token
 
         # make the real deal request
         response = session.get(
-            DRIVE_URL,
-            params=params,
+            url,
             stream=True,
-            headers={"Cache-Control": "no-cache"},
         )
 
         # progress bar
@@ -389,9 +367,13 @@ class Carpyncho:
 
         # retrive all the data one chunk at the time
         for chunk in response.iter_content(CHUNK_SIZE):
+
             if not chunk:
                 break
-            parquet_stream.write(decompressor.decompress(chunk))
+
+            decompressed = decompressor.decompress(chunk)
+            parquet_stream.write(decompressed)
+
             file_hash.update(chunk)
             pbar.update(CHUNK_SIZE)
 
@@ -438,19 +420,19 @@ class Carpyncho:
 
         """
         info = self.catalog_info(tile, catalog)
-        driveid, size = info["driveid"], info["size"]
+        url, size = info["url"], info["size"]
         md5sum = info["md5sum"].split()[0].strip().lower()
 
         df = from_cache(
             cache=self.cache,
             tag="get_catalog",
-            function=self._grive_download,
+            function=self._http_download,
             cache_expire=self.cache_expire,
             force=force,
-            # params to _gdrive_download
+            # params to _http_download
             tile=tile,
             catalog=catalog,
-            driveid=driveid,
+            url=url,
             size=size,
             md5sum=md5sum,
         )

@@ -132,3 +132,4 @@ docs/source/index.rst
 *_features.csv
 data/local_*
 
+_cache/
