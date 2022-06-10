@@ -182,7 +182,7 @@ def test_CLI_catalog_info(client, script_runner):
             f"  - date: {info['date']}",
             f"  - md5sum: {info['md5sum']}",
             f"  - filename: {info['filename']}",
-            f"  - driveid: {info['driveid']}",
+            f"  - url: {info['url']}",
             f"  - size: {size}",
             f"  - records: {records}",
         ]
@@ -222,7 +222,7 @@ def test_parse_local_index(client):
         "date": str,
         "md5sum": str,
         "filename": str,
-        "driveid": str,
+        "url": str,
         "size": int,
         "records": int,
     }
@@ -243,7 +243,7 @@ def test_parse_remote_index(remote_client):
         "date": str,
         "md5sum": str,
         "filename": str,
-        "driveid": str,
+        "url": str,
         "size": int,
         "records": int,
     }

@@ -62,9 +62,6 @@ VERSION = __version__
 #: Location of the entire dataset index.
 CARPYNCHO_INDEX_URL = "https://raw.githubusercontent.com/carpyncho/carpyncho-py/master/data/index.json"  # noqa
 
-#: Google drive location.
-DRIVE_URL = "https://docs.google.com/uc?export=download"
-
 
 #: Where carpyncho gonna store the entire data.
 CARPYNCHOPY_DATA_PATH = pathlib.Path(
@@ -316,7 +313,7 @@ class Carpyncho:
         -------
         dict:
             The entire information of the given catalog file. This include
-            drive-id, md5 checksum, size in bytes, number of total records,
+            url, md5 checksum, size in bytes, number of total records,
             etc.
 
         Raises
@@ -340,18 +337,15 @@ class Carpyncho:
     # THE DOWNLOAD PART
     # =========================================================================
 
-    def _grive_download(self, tile, catalog, driveid, size, md5sum):
+    def _http_download(self, tile, catalog, url, size, md5sum):
 
         # prepare the parameters and download the token
-        params = {"id": driveid, "confirm": "t"}
         session = requests.Session()
 
         # make the real deal request
-        response = session.post(
-            DRIVE_URL,
-            params=params,
+        response = session.get(
+            url,
             stream=True,
-            headers={"Cache-Control": "no-cache"},
         )
 
         # progress bar
@@ -426,19 +420,19 @@ class Carpyncho:
 
         """
         info = self.catalog_info(tile, catalog)
-        driveid, size = info["driveid"], info["size"]
+        url, size = info["url"], info["size"]
         md5sum = info["md5sum"].split()[0].strip().lower()
 
         df = from_cache(
             cache=self.cache,
             tag="get_catalog",
-            function=self._grive_download,
+            function=self._http_download,
             cache_expire=self.cache_expire,
             force=force,
-            # params to _gdrive_download
+            # params to _http_download
             tile=tile,
             catalog=catalog,
-            driveid=driveid,
+            url=url,
             size=size,
             md5sum=md5sum,
         )
