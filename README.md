@@ -3,7 +3,7 @@
 > Python client for Carpyncho VVV dataset collection.
 
 [![QuatroPe](https://img.shields.io/badge/QuatroPe-Applications-1c5896)](https://quatrope.github.io/)
-[![CI](https://github.com/quatrope/pycf3/actions/workflows/CI.yml/badge.svg)](https://github.com/carpyncho/carpyncho-py/actions/workflows/CI.yml)
+[![CI](https://github.com/carpyncho/carpyncho-py/actions/workflows/CI.yml/badge.svg)](https://github.com/carpyncho/carpyncho-py/actions/workflows/CI.yml)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3779502.svg)](https://doi.org/10.5281/zenodo.3779502)
 [![Python 3](https://img.shields.io/badge/python-3.8+-blue.svg)](https://badge.fury.io/py/carpyncho)
 [![BSD-3](https://img.shields.io/badge/License-BSD3-blue.svg)](https://www.tldrlegal.com/l/bsd3)
