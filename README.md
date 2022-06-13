@@ -5,7 +5,7 @@
 [![QuatroPe](https://img.shields.io/badge/QuatroPe-Applications-1c5896)](https://quatrope.github.io/)
 [![Build Status](https://travis-ci.com/carpyncho/carpyncho-py.svg?branch=master)](https://travis-ci.com/carpyncho/carpyncho-py)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3779502.svg)](https://doi.org/10.5281/zenodo.3779502)
-[![Python 3](https://img.shields.io/badge/python-3.7+-blue.svg)](https://badge.fury.io/py/carpyncho)
+[![Python 3](https://img.shields.io/badge/python-3.8+-blue.svg)](https://badge.fury.io/py/carpyncho)
 [![BSD-3](https://img.shields.io/badge/License-BSD3-blue.svg)](https://www.tldrlegal.com/l/bsd3)
 [![Documentation Status](https://readthedocs.org/projects/carpyncho-py/badge/?version=latest)](https://carpyncho-py.readthedocs.io/en/latest/?badge=latest)
 [![PyPI](https://img.shields.io/pypi/v/carpyncho)](https://pypi.org/project/carpyncho/)
