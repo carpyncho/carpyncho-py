@@ -139,7 +139,7 @@ def test_get_catalog(client):
 
 
 def test_CLI_list_tiles(client, script_runner):
-    expected = "\n".join(f"  - {t}" for t in client.list_tiles())
+    expected = "\n".join(["Tiles"] + [f"  - {t}" for t in client.list_tiles()])
     ret = script_runner.run("carpyncho", "list-tiles")
     assert ret.stdout.strip() == expected.strip()
     assert ret.stderr == ""
@@ -284,13 +284,13 @@ def test_CLI_parquet_engines(client, script_runner):
         outpath = os.path.join(TEST_CACHE_PATH, f"test_{engine}.csv")
         script_runner.run(
             "carpyncho",
+            "--parquet-engine",
+            engine,
             "download-catalog",
             "_test",
             "parquet_bz2_small",
             "--out",
             outpath,
-            "--parquet-engine",
-            engine,
             "--force",
         )
         results.append(pd.read_csv(outpath))

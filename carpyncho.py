@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Copyright (c) 2020, Juan B Cabral
+# Copyright (c) 2020, 2021, 2022, Juan B Cabral
 # License: BSD-3-Clause
 #   Full Text: https://github.com/carpyncho/carpyncho-py/blob/master/LICENSE
 
@@ -36,6 +36,7 @@ import io
 import json
 import os
 import pathlib
+import pickle
 import typing as t
 import urllib
 
@@ -182,10 +183,10 @@ class Carpyncho:
 
     """
 
-    #: Local cache of the carpyncho database.
-    cache: t.Union[dcache.Cache, dcache.FanoutCache] = attr.ib()
+    #: Location of the catalog cache
+    cache_path: str = attr.ib(default=DEFAULT_CACHE_DIR)
 
-    #: Default timout of the catalog-cache.
+    #: Default timeout of the catalog-cache.
     #: Try to always set to None (default), the catalogs are big and mostly
     #: never change.
     cache_expire: float = attr.ib(default=None, repr=False)
@@ -197,13 +198,17 @@ class Carpyncho:
     index_url: str = attr.ib(default=CARPYNCHO_INDEX_URL)
 
     # =========================================================================
-    # ATTRS ORCHESTRATION
+    # Cache properti
     # =========================================================================
 
-    @cache.default
-    def _cache_default(self):
+    @property
+    @functools.lru_cache(maxsize=None)
+    def cache(self):
+        """Return the internal cache of the client the internal cache."""
         return dcache.Cache(
-            directory=DEFAULT_CACHE_DIR, size_limit=DEFAULT_CACHE_SIZE_LIMIT
+            directory=self.cache_path,
+            size_limit=DEFAULT_CACHE_SIZE_LIMIT,
+            default_pickle_protocol=pickle.DEFAULT_PROTOCOL,
         )
 
     # =========================================================================
@@ -230,6 +235,7 @@ class Carpyncho:
         def get_json_data(url):
             parsed = urllib.parse.urlparse(url)
             if parsed.scheme in ("http", "https", "ftp"):
+
                 response = requests.get(
                     url, headers={"Cache-Control": "no-cache"}
                 )
@@ -457,17 +463,22 @@ class CLI:
     footnotes = "\n".join(
         [
             "This software is under the BSD 3-Clause License.",
-            "Copyright (c) 2020, Juan Cabral.",
+            "Copyright (c) 2020, 2021, 2022, Juan Cabral.",
             "For bug reporting or other instructions please check:"
             " https://github.com/carpyncho/carpyncho-py",
         ]
     )
 
     run = attr.ib(init=False)
+    client_config = attr.ib(factory=dict)
 
     @run.default
     def _set_run_default(self):
         app = typer.Typer()
+
+        decorator = app.callback()
+        decorator(self._set_global_state)
+
         for k in dir(self):
             if k.startswith("_"):
                 continue
@@ -477,13 +488,41 @@ class CLI:
                 decorator(v)
         return app
 
+    def _set_global_state(
+        self,
+        cache_path: str = typer.Option(
+            default=DEFAULT_CACHE_DIR, help="Path of the cache."
+        ),
+        cache_expire: t.Optional[float] = typer.Option(
+            default=None,
+            help="Default timeout of the cache. By default never expire.",
+        ),
+        parquet_engine: str = typer.Option(
+            default=DEFAULT_PARQUET_ENGINE,
+            help="Parquet engine to decode de file",
+        ),
+        index_url: str = typer.Option(
+            default=CARPYNCHO_INDEX_URL, help="Path of the index.json file"
+        ),
+    ):
+        self.client_config.update(
+            cache_path=cache_path,
+            cache_expire=cache_expire,
+            parquet_engine=parquet_engine,
+            index_url=index_url,
+        )
+
     def version(self):
         """Print Carpyncho version."""
         typer.echo(VERSION)
 
     def list_tiles(self):
         """Show available tiles."""
-        client = Carpyncho()
+        client = Carpyncho(**self.client_config)
+
+        msg = typer.style("Tiles", fg=typer.colors.GREEN)
+        typer.echo(msg)
+
         for tile in client.list_tiles():
             typer.echo(f"  - {tile}")
 
@@ -494,7 +533,7 @@ class CLI:
         ),
     ):
         """Show the available catalogs for a given tile."""
-        client = Carpyncho()
+        client = Carpyncho(**self.client_config)
 
         msg = typer.style(f"Tile '{tile}'", fg=typer.colors.GREEN)
         typer.echo(msg)
@@ -508,7 +547,7 @@ class CLI:
         catalog: str = typer.Argument(..., help="Tha name of the catalog"),
     ):
         """Check if a given catalog and tile exists."""
-        client = Carpyncho()
+        client = Carpyncho(**self.client_config)
 
         if client.has_catalog(tile, catalog):
             has, fg = "exists", typer.colors.GREEN
@@ -531,7 +570,7 @@ class CLI:
             "records": humanize.intcomma,
         }
 
-        client = Carpyncho()
+        client = Carpyncho(**self.client_config)
         msg = typer.style(
             f"Catalog {tile}-{catalog}", fg=typer.colors.GREEN, bold=True
         )
@@ -551,10 +590,6 @@ class CLI:
                 "Try to always set force to False."
             ),
         ),
-        parquet_engine: str = typer.Option(
-            default=DEFAULT_PARQUET_ENGINE,
-            help="Parquet engine to decode de file",
-        ),
         out: str = typer.Option(
             ...,
             help=(
@@ -568,18 +603,13 @@ class CLI:
 
         tile:
             The name of the tile.
-
         catalog:
             The name of the catalog.
-
         out:
-
-
+            The location to store the catalog.
         force:
-
-
-        parquet_engine:
-
+            Download a new version of the catalog even if it already exists in
+            the cache.
 
         """
         PARSERS = {
@@ -589,7 +619,7 @@ class CLI:
             ".parquet": pd.DataFrame.to_parquet,
         }
 
-        client = Carpyncho(parquet_engine=parquet_engine)
+        client = Carpyncho(**self.client_config)
 
         df = client.get_catalog(tile, catalog, force=force)
 

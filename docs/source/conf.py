@@ -27,7 +27,7 @@ import carpyncho
 # -- Project information -----------------------------------------------------
 
 project = 'Carpyncho-py'
-copyright = '2020, J.B. Cabral'
+copyright = '2020, 2021, 2022, J.B. Cabral'
 author = 'J.B. Cabral'
 
 # The short X.Y version.
@@ -89,7 +89,7 @@ exclude_patterns = [
 # You can specify multiple suffix as a list of string:
 #
 # source_suffix = ['.rst', '.md']
-source_suffix = ['.rst', '.ipynb']
+source_suffix = ['.rst']
 
 # The master toctree document.
 master_doc = 'index'
